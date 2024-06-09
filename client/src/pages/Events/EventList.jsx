@@ -1,0 +1,79 @@
+import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
+import DefaultLayout from '../../layout/DefaultLayout';
+
+import useListEvents from '../../api/events/useEventList';
+import useChangeEventStatus from '../../api/events/useChangeEventStatus';
+
+import { useQueryClient } from 'react-query';
+
+const EventList = () => {
+  const { data: events } = useListEvents();
+  const { mutate } = useChangeEventStatus();
+
+  const queryClient = useQueryClient();
+
+  const handleStatusChange = (eventId, newStatus) => {
+    // Handle the status change logic here, e.g., make an API call to update the status
+    console.log(`Event ID: ${eventId}, New Status: ${newStatus}`);
+    let params = `${eventId}/${newStatus}`;
+    mutate(params, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['events'] });
+      },
+    });
+  };
+
+  return (
+    <DefaultLayout>
+      <Breadcrumb pageName="Event List" />
+      <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+        <div className="max-w-full overflow-x-auto">
+          <table className="w-full table-auto">
+            <thead>
+              <tr className="bg-gray-2 text-left dark:bg-meta-4">
+                <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                  Event Name
+                </th>
+                <th className="py-4 px-4 font-medium text-black dark:text-white">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {events?.data?.map((event) => (
+                <tr key={event._id}>
+                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">
+                      {event.name}
+                    </h5>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <div className="flex items-center space-x-3.5">
+                      {/* Add your action buttons here */}
+                      {/* <button className="hover:text-primary">Action 1</button>
+                      <button className="hover:text-primary">Action 2</button> */}
+                      <select
+                        value={event.status}
+                        onChange={(e) =>
+                          handleStatusChange(event._id, e.target.value)
+                        }
+                        className="hover:text-primary"
+                      >
+                        <option value="draft">draft</option>
+                        <option value="upcoming">upcoming</option>
+                        <option value="ongoing">ongoing</option>
+                        <option value="finished">finished</option>
+                      </select>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </DefaultLayout>
+  );
+};
+
+export default EventList;

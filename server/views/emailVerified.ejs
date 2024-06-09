@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добро пожаловать</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #007bff; /* Blue background */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 40px; /* Increased padding */
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Increased shadow */
+      max-width: 500px; /* Added maximum width */
+      text-align: center;
+    }
+
+    p {
+      font-size: 20px; /* Increased font size */
+      color: #007bff; /* Blue text color */
+      margin: 0;
+      padding: 0;
+      line-height: 1.5; /* Increased line height */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p>Добро пожаловать, <%= name %>! Ваша электронная почта <%= email %> успешно подтверждена.</p>
+  </div>
+</body>
+</html>
