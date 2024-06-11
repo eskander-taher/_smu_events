@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
 import AuthIllestration from "./AuthIllestration";
-
 import useLogin from "../../api/auth/useLogin";
 import useAuth from "../../hooks/useAuth";
 import { MdOutlineMailOutline } from "react-icons/md";
@@ -10,7 +8,7 @@ import { PiPassword } from "react-icons/pi";
 import { ToastContainer, toast } from "react-toastify";
 import DefaultLayout from "../../layout/DefaultLayout";
 
-const SignIn = () => {
+const Login = () => {
 	const [data, setData] = useState({
 		email: "",
 		password: "",
@@ -36,10 +34,10 @@ const SignIn = () => {
 				loginUser({
 					token: data.data.token,
 				});
-				toast.success(response.data.message);
+				toast.success(data.data.message);
 			},
 			onError: (error) => {
-				toast.error(error.response.data.error);
+				toast.error(error.response.data.message);
 			},
 		});
 	};
@@ -119,7 +117,7 @@ const SignIn = () => {
 												: "bg-primary cursor-pointer hover:bg-opacity-90"
 										}`}
 									/>
-									<ToastContainer position="top-center" />
+									<ToastContainer position="top-center" autoClose={false} draggable />
 								</div>
 							</form>
 						</div>
@@ -130,4 +128,4 @@ const SignIn = () => {
 	);
 };
 
-export default SignIn;
+export default Login;

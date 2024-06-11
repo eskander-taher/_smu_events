@@ -1,13 +1,15 @@
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import DefaultLayout from "../../layout/DefaultLayout";
-import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb";
+import Title from "../../components/Title";
 
 import useCreateSubmissions from "../../api/submissions/useCreateSubmissions";
 import { useParams } from "react-router-dom";
 
 import useGetEvent from "../../api/events/useGetEvent";
-import { MdClose, MdKeyboardArrowDown } from "react-icons/md";
+import { MdKeyboardArrowDown } from "react-icons/md";
 import useAuth from "../../hooks/useAuth";
+
+import { ToastContainer, toast } from "react-toastify";
 
 const formFields = {
 	workName: "",
@@ -22,24 +24,22 @@ const formFields = {
 
 const AddSubmissions = () => {
 	const { user } = useAuth();
-	const { eventId } = useParams();
+	const { id } = useParams();
 	const [data, setData] = useState({
 		...formFields,
-		event: eventId,
+		event: id,
 		author: user.id,
 	});
 
-	const [alert, setAlert] = useState({
-		type: "",
-		message: "",
-		active: false,
-	});
-
-	console.log(user);
-
 	const [isOptionSelected, setIsOptionSelected] = useState(false);
 
-	const { data: event, isLoading: isEventLoading } = useGetEvent(eventId);
+	const { data: eventData, isLoading: isEventLoading, isSuccess } = useGetEvent(id);
+
+	let event = {};
+
+	if (isSuccess) {
+		event = eventData.data.data;
+	}
 
 	const { mutate, isLoading } = useCreateSubmissions();
 
@@ -74,47 +74,33 @@ const AddSubmissions = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(data);
 		mutate(data, {
-			onSuccess: (data) => {
+			onSuccess: () => {
+				toast.success("Статья успешно загружена");
 				setData({
 					...formFields,
 				});
-				console.log(data);
-				setAlert({
-					type: "success",
-					message: "Your work is submited successfully",
-					active: true,
-				});
 			},
-			onError(error, variables, context) {
+			onError(error) {
+				toast.error("Не удалось загрузить статью");
 				console.log(error);
-
-				setAlert({
-					type: "error",
-					message: error.response.data.error,
-					active: true,
-				});
 			},
 		});
 	};
 	return (
 		<DefaultLayout>
-			<Breadcrumb pageName="Add Submission" />
-			<div className=" rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-				<div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-					<h3 className="font-medium text-black dark:text-white">Submission Form</h3>
-				</div>
+			<Title>Загрузить статью</Title>
+			<div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
 				<form className="pt-3 pb-3 pl-5 pr-5">
 					<div className="mb-4">
 						<label className="mb-2.5 block font-medium text-black dark:text-white">
-							Select Section
+							Выберите секцию
 						</label>
 
 						<div className="relative z-20 bg-white dark:bg-form-input">
 							<select
 								value={data.section}
-								placeholder="Select Section"
+								placeholder="Выберите Секцию"
 								name="section"
 								onChange={(e) => {
 									handleChange(e);
@@ -130,7 +116,7 @@ const AddSubmissions = () => {
 										disabled
 										className="text-body dark:text-bodydark"
 									>
-										loading
+										загрузка
 									</option>
 								) : (
 									<>
@@ -139,15 +125,16 @@ const AddSubmissions = () => {
 											disabled
 											className="text-body dark:text-bodydark"
 										>
-											Select Section
+											Выберите секцию
 										</option>
-										{event?.data?.sections.map((section) => {
+										{event.sections.map((section) => {
 											return (
 												<option
+													key={section._id}
 													value={section._id}
 													className="text-body dark:text-bodydark"
 												>
-													{section.order} {section.name}
+													{`${section.order}. ${section.name}`}
 												</option>
 											);
 										})}
@@ -161,7 +148,7 @@ const AddSubmissions = () => {
 					</div>
 					<div className="mb-4">
 						<label className="mb-2.5 block font-medium text-black dark:text-white">
-							Work name
+							Название работы
 						</label>
 						<div className="relative">
 							<input
@@ -169,14 +156,14 @@ const AddSubmissions = () => {
 								name="workName"
 								value={data.workName}
 								onChange={handleChange}
-								placeholder="Enter your Work name"
+								placeholder="Введите Название Работы"
 								className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
 							/>
 						</div>
 					</div>
 					<div className="mb-4">
 						<label className="mb-2.5 block font-medium text-black dark:text-white">
-							Supervisor name
+							Имя руководителя
 						</label>
 						<div className="relative">
 							<input
@@ -184,14 +171,14 @@ const AddSubmissions = () => {
 								name="supervisorName"
 								value={data.supervisorName}
 								onChange={handleChange}
-								placeholder="Enter your Supervisor name"
+								placeholder="Введите Имя Руководителя"
 								className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
 							/>
 						</div>
 					</div>
 					<div className="mb-4">
 						<label className="mb-2.5 block font-medium text-black dark:text-white">
-							Supervisor Academic Degree
+							Ученая степень руководителя
 						</label>
 						<div className="relative">
 							<input
@@ -199,7 +186,7 @@ const AddSubmissions = () => {
 								name="supervisorAcademicDegree"
 								value={data.supervisorAcademicDegree}
 								onChange={handleChange}
-								placeholder="Enter your Supervisor Academic Degree"
+								placeholder="Введите Ученую Степень Руководителя"
 								className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
 							/>
 						</div>
@@ -212,11 +199,11 @@ const AddSubmissions = () => {
 						>
 							<div className="w-full xl:w-1/3">
 								<label className="mb-2.5 block text-black dark:text-white">
-									Co-author Full name
+									Полное имя соавтора
 								</label>
 								<input
 									type="text"
-									placeholder="Enter Full name"
+									placeholder="Введите Полное Имя"
 									value={coauthor.fullName}
 									onChange={(e) =>
 										handleCoauthorChange(index, "fullName", e.target.value)
@@ -226,11 +213,11 @@ const AddSubmissions = () => {
 							</div>
 							<div className="w-full xl:w-1/3">
 								<label className="mb-2.5 block text-black dark:text-white">
-									Co-author University
+									Университет соавтора
 								</label>
 								<input
 									type="text"
-									placeholder="Enter university"
+									placeholder="Введите Университет"
 									value={coauthor.university}
 									onChange={(e) =>
 										handleCoauthorChange(index, "university", e.target.value)
@@ -244,7 +231,7 @@ const AddSubmissions = () => {
 								onClick={() => removeCoauthor(index)}
 								className="py-2 px-3 mt-7 flex h-10 w-full items-center justify-center rounded bg-red-500 text-white hover:bg-red-600 xl:w-auto"
 							>
-								Remove
+								Удалить
 							</button>
 						</div>
 					))}
@@ -253,12 +240,12 @@ const AddSubmissions = () => {
 						onClick={addCoauthor}
 						className="mb-4 flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
 					>
-						Add New Co-author
+						Добавить нового соавтора
 					</button>
 
 					<div className="mb-4">
 						<label className="mb-2.5 block font-medium text-black dark:text-white">
-							Attach File
+							Прикрепить файл
 						</label>
 						<input
 							type="file"
@@ -269,8 +256,7 @@ const AddSubmissions = () => {
 					</div>
 					<div className="mb-4">
 						<label className="mb-2.5 block font-medium text-black dark:text-white">
-							<p className="mb-2.5">With Publication</p>
-							{/* </label> */}
+							<p className="mb-2.5">С публикацией</p>
 							<div className="relative">
 								<input
 									type="checkbox"
@@ -332,7 +318,7 @@ const AddSubmissions = () => {
 							type="submit"
 							onClick={handleSubmit}
 							disabled={isLoading}
-							value={isLoading ? "Loading" : "Submit"}
+							value={isLoading ? "Загрузка" : "Отправить"}
 							className={`w-full  rounded-lg border border-primary  p-4 text-white transition ${
 								isLoading
 									? " bg-slate-500"
@@ -340,92 +326,9 @@ const AddSubmissions = () => {
 							}`}
 						/>
 					</div>
-
-					{!alert.active ? (
-						<></>
-					) : alert.type == "error" ? (
-						<div className="flex w-full border-l-6 border-[#F87171] bg-[#F87171] bg-opacity-[15%] px-7 py-4 shadow-md dark:bg-[#1B1B24] dark:bg-opacity-30 md:p-4">
-							<div className="mr-5 flex h-9 w-full max-w-[36px] items-center justify-center rounded-lg bg-[#F87171]">
-								<svg
-									width="13"
-									height="13"
-									viewBox="0 0 13 13"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										d="M6.4917 7.65579L11.106 12.2645C11.2545 12.4128 11.4715 12.5 11.6738 12.5C11.8762 12.5 12.0931 12.4128 12.2416 12.2645C12.5621 11.9445 12.5623 11.4317 12.2423 11.1114C12.2422 11.1113 12.2422 11.1113 12.2422 11.1113C12.242 11.1111 12.2418 11.1109 12.2416 11.1107L7.64539 6.50351L12.2589 1.91221L12.2595 1.91158C12.5802 1.59132 12.5802 1.07805 12.2595 0.757793C11.9393 0.437994 11.4268 0.437869 11.1064 0.757418C11.1063 0.757543 11.1062 0.757668 11.106 0.757793L6.49234 5.34931L1.89459 0.740581L1.89396 0.739942C1.57364 0.420019 1.0608 0.420019 0.740487 0.739944C0.42005 1.05999 0.419837 1.57279 0.73985 1.89309L6.4917 7.65579ZM6.4917 7.65579L1.89459 12.2639L1.89395 12.2645C1.74546 12.4128 1.52854 12.5 1.32616 12.5C1.12377 12.5 0.906853 12.4128 0.758361 12.2645L1.1117 11.9108L0.758358 12.2645C0.437984 11.9445 0.437708 11.4319 0.757539 11.1116C0.757812 11.1113 0.758086 11.111 0.75836 11.1107L5.33864 6.50287L0.740487 1.89373L6.4917 7.65579Z"
-										fill="#ffffff"
-										stroke="#ffffff"
-									></path>
-								</svg>
-							</div>
-							<div className="w-full">
-								<div className="flex justify-between align-middle">
-									<h5 className="mb-3 font-semibold text-[#B45454]">
-										Login Error
-									</h5>
-									<MdClose
-										className="text-[#CD5D5D] cursor-pointer hover:scale-110"
-										size={20}
-										onClick={() =>
-											setAlert({
-												type: "",
-												message: "",
-												active: false,
-											})
-										}
-									/>
-								</div>
-								<ul>
-									<li className="leading-relaxed text-[#CD5D5D]">
-										All fields are required
-									</li>
-								</ul>
-							</div>
-						</div>
-					) : (
-						<div className="flex w-full border-l-6 border-[#34D399] bg-[#34D399] bg-opacity-[15%] px-7 py-4 shadow-md dark:bg-[#1B1B24] dark:bg-opacity-30 md:p-4">
-							<div className="mr-5 flex h-9 w-full max-w-[36px] items-center justify-center rounded-lg bg-[#34D399]">
-								<svg
-									width="16"
-									height="12"
-									viewBox="0 0 16 12"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										d="M15.2984 0.826822L15.2868 0.811827L15.2741 0.797751C14.9173 0.401867 14.3238 0.400754 13.9657 0.794406L5.91888 9.45376L2.05667 5.2868C1.69856 4.89287 1.10487 4.89389 0.747996 5.28987C0.417335 5.65675 0.417335 6.22337 0.747996 6.59026L0.747959 6.59029L0.752701 6.59541L4.86742 11.0348C5.14445 11.3405 5.52858 11.5 5.89581 11.5C6.29242 11.5 6.65178 11.3355 6.92401 11.035L15.2162 2.11161C15.5833 1.74452 15.576 1.18615 15.2984 0.826822Z"
-										fill="white"
-										stroke="white"
-									></path>
-								</svg>
-							</div>
-							<div className="w-full">
-								<div className="flex justify-between align-middle">
-									<h5 className="mb-3 text-lg font-semibold text-black dark:text-[#34D399] ">
-										Success
-									</h5>
-									<MdClose
-										className="dark:text-[#34D399]  cursor-pointer hover:scale-110"
-										size={20}
-										onClick={() =>
-											setAlert({
-												type: "",
-												message: "",
-												active: false,
-											})
-										}
-									/>
-								</div>
-								<p className="text-base leading-relaxed text-body">
-									{alert.message}
-								</p>
-							</div>
-						</div>
-					)}
 				</form>
 			</div>
+			<ToastContainer position="top-center" autoClose={false} draggable />
 		</DefaultLayout>
 	);
 };

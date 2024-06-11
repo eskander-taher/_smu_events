@@ -1,41 +1,36 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { MdOutlineMailOutline, MdOutlinePhoneEnabled } from "react-icons/md";
 import { CiCalendarDate } from "react-icons/ci";
-import {
-	MdOutlineMailOutline,
-	MdOutlinePersonOutline,
-	MdOutlinePhoneEnabled,
-} from "react-icons/md";
 import { IoBookOutline, IoPersonOutline } from "react-icons/io5";
-import { PiPassword } from "react-icons/pi";
+import { Link } from "react-router-dom";
+import useRegisterModerator from "../../api/auth/useRegisterModerator";
+import { RiLockPasswordLine } from "react-icons/ri";
 import { ToastContainer, toast } from "react-toastify";
-import useRegisterAuthor from "../../api/auth/useRegisterAuthor";
-import { LiaCitySolid, LiaUniversitySolid } from "react-icons/lia";
-import { MdClass, MdGroup } from "react-icons/md";
- 
+
 const formFields = {
 	lastName: "",
 	firstName: "",
 	middleName: "",
-	dateOfBirth: "",
 	email: "",
-	phoneNumber: "",
 	password: "",
-	authorStatus: "",
-	city: "",
-	region: "",
-	university: "",
+	phoneNumber: "",
+	dateOfBirth: "",
 	faculty: "",
 	department: "",
-	course: "",
-	groupNumber: "",
+	jobTitle: "",
 };
 
-const StatusEnum = ["Молодой ученый", "Специалитет", "Бакалавриат", "Магистрант", "Аспирант"];
+const JobTitleEnum = [
+	"Ассистент",
+	"Старший преподаватель",
+	"Доцент",
+	"Профессор",
+	"Заведующий кафедрой",
+];
 
-const AuthorSignupForm = () => {
+const ModeratorSignupForm = () => {
 	const [data, setData] = useState({ ...formFields });
-	const { mutate, isLoading } = useRegisterAuthor();
+	const { mutate, isLoading } = useRegisterModerator();
 
 	const handleChange = (e) => {
 		setData({ ...data, [e.target.name]: e.target.value });
@@ -44,15 +39,15 @@ const AuthorSignupForm = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
+		// Check if any required field is empty
 		const requiredFields = [
 			"lastName",
 			"firstName",
 			"email",
 			"password",
-			"university",
 			"faculty",
 			"department",
-			"authorStatus",
+			"jobTitle",
 		];
 
 		const isEmpty = requiredFields.some((field) => !data[field]);
@@ -62,12 +57,14 @@ const AuthorSignupForm = () => {
 		}
 
 		mutate(data, {
-			onSuccess: (response) => {
-				setData({ ...formFields });
-				toast.success(response.data.message);
+			onSuccess: (data) => {
+				toast.success(data.data.message);
+				setData({
+					...formFields,
+				});
 			},
-			onError: (error) => {
-				toast.error(error.response.data.error);
+			onError(error) {
+				toast.error(error.response.data.message);
 			},
 		});
 	};
@@ -128,6 +125,7 @@ const AuthorSignupForm = () => {
 					</span>
 				</div>
 			</div>
+
 			<div className="mb-4">
 				<label className="mb-2.5 block font-medium text-black dark:text-white">
 					Электронная почта *
@@ -138,7 +136,7 @@ const AuthorSignupForm = () => {
 						name="email"
 						value={data.email}
 						onChange={handleChange}
-						placeholder="Введите ваш email"
+						placeholder="Введите вашу электронную почту"
 						className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
 					/>
 					<span className="absolute right-4 top-4">
@@ -146,6 +144,7 @@ const AuthorSignupForm = () => {
 					</span>
 				</div>
 			</div>
+
 			<div className="mb-4">
 				<label className="mb-2.5 block font-medium text-black dark:text-white">
 					Пароль *
@@ -160,7 +159,7 @@ const AuthorSignupForm = () => {
 						className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
 					/>
 					<span className="absolute right-4 top-4">
-						<PiPassword />
+						<RiLockPasswordLine />
 					</span>
 				</div>
 			</div>
@@ -204,25 +203,7 @@ const AuthorSignupForm = () => {
 
 			<div className="mb-6">
 				<label className="mb-2.5 block font-medium text-black dark:text-white">
-					Университет *
-				</label>
-				<div className="relative">
-					<input
-						type="text"
-						name="university"
-						value={data.university}
-						onChange={handleChange}
-						placeholder="Введите ваш университет"
-						className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-					/>
-					<span className="absolute right-4 top-4">
-						<LiaUniversitySolid />
-					</span>
-				</div>
-			</div>
-			<div className="mb-6">
-				<label className="mb-2.5 block font-medium text-black dark:text-white">
-					Факультет *
+					Факультет/Институт *
 				</label>
 				<div className="relative">
 					<input
@@ -234,7 +215,7 @@ const AuthorSignupForm = () => {
 						className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
 					/>
 					<span className="absolute right-4 top-4">
-						<MdClass />
+						<IoBookOutline />
 					</span>
 				</div>
 			</div>
@@ -252,118 +233,59 @@ const AuthorSignupForm = () => {
 						className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
 					/>
 					<span className="absolute right-4 top-4">
-						<MdClass />
-					</span>
-				</div>
-			</div>
-			<div className="mb-6">
-				<label className="mb-2.5 block font-medium text-black dark:text-white">Курс</label>
-				<div className="relative">
-					<input
-						type="text"
-						name="course"
-						value={data.course}
-						onChange={handleChange}
-						placeholder="Введите ваш курс"
-						className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-					/>
-					<span className="absolute right-4 top-4">
 						<IoBookOutline />
 					</span>
 				</div>
 			</div>
-			<div className="mb-6">
-				<label className="mb-2.5 block font-medium text-black dark:text-white">
-					Номер группы
+
+			<div>
+				<label className="mb-3 block text-black dark:text-white">
+					Выберите должность *
 				</label>
-				<div className="relative">
-					<input
-						type="text"
-						name="groupNumber"
-						value={data.groupNumber}
-						onChange={handleChange}
-						placeholder="Введите ваш номер группы"
-						className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-					/>
-					<span className="absolute right-4 top-4">
-						<MdGroup />
-					</span>
-				</div>
-			</div>
-			<div className="mb-6">
-				<label className="mb-2.5 block font-medium text-black dark:text-white">
-					Статус участника *
-				</label>
-				<div className="relative">
+
+				<div className="relative z-20 bg-white dark:bg-form-input">
 					<select
-						name="authorStatus"
-						value={data.authorStatus}
+						value={data.jobTitle}
+						name="jobTitle"
 						onChange={handleChange}
-						className="w-full appearance-none rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+						className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-12 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${
+							data.jobTitle ? "text-black dark:text-white" : ""
+						}`}
 					>
-						<option value="">Выберите статус</option>
-						{StatusEnum.map((status) => (
-							<option key={status} value={status}>
-								{status}
-							</option>
-						))}
+						<option value="" disabled className="text-body dark:text-bodydark">
+							Выберите должность
+						</option>
+						{JobTitleEnum.map((status) => {
+							return (
+								<option
+									key={status}
+									value={status}
+									className="text-body dark:text-bodydark"
+								>
+									{status}
+								</option>
+							);
+						})}
 					</select>
-					<span className="absolute right-4 top-4">
-						<MdOutlinePersonOutline />
-					</span>
 				</div>
 			</div>
-			<div className="mb-6">
-				<label className="mb-2.5 block font-medium text-black dark:text-white">Город</label>
-				<div className="relative">
-					<input
-						type="text"
-						name="city"
-						value={data.city}
-						onChange={handleChange}
-						placeholder="Введите ваш город"
-						className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-					/>
-					<span className="absolute right-4 top-4">
-						<LiaCitySolid />
-					</span>
-				</div>
+
+			<div className="my-5">
+				<input
+					type="submit"
+					onClick={handleSubmit}
+					disabled={isLoading}
+					value={isLoading ? "Загрузка..." : "Создать аккаунт"}
+					className={`w-full  rounded-lg border border-primary  p-4 text-white transition ${
+						isLoading
+							? " bg-slate-500"
+							: "bg-primary cursor-pointer hover:bg-opacity-90"
+					}`}
+				/>
+				<ToastContainer position="top-center" autoClose={false} draggable />
 			</div>
-			<div className="mb-6">
-				<label className="mb-2.5 block font-medium text-black dark:text-white">
-					Регион
-				</label>
-				<div className="relative">
-					<input
-						type="text"
-						name="region"
-						value={data.region}
-						onChange={handleChange}
-						placeholder="Введите ваш регион"
-						className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-					/>
-					<span className="absolute right-4 top-4">
-						<LiaCitySolid />
-					</span>
-				</div>
-			</div>
-			<button
-				className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-gray"
-				onClick={handleSubmit}
-			>
-				{isLoading ? "Загрузка..." : "Регистрация"}
-			</button>
-			<div className="mt-6 text-center">
-				<p>
-					Уже есть аккаунт?{" "}
-					<Link to="/author/login" className="text-primary">
-						Войти
-					</Link>
-				</p>
-			</div>
-			<ToastContainer position="top-center" autoClose={false} draggable />
 		</form>
 	);
 };
 
-export default AuthorSignupForm;
+export default ModeratorSignupForm;

@@ -5,6 +5,7 @@ import image3 from "../images/cards/man_on_microscope.avif";
 import image4 from "../images/cards/two_on_office.avif";
 
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const images = [
 	{ src: image1, alt: "Image 1", name: "Website 1" },
@@ -16,6 +17,7 @@ const images = [
 const ImageSlider = () => {
 	const navigate = useNavigate();
 	const [currentIndex, setCurrentIndex] = useState(0);
+	const { user } = useAuth();
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -26,23 +28,29 @@ const ImageSlider = () => {
 	}, []);
 
 	return (
-		<div className="relative w-full h-64 overflow-hidden mb-5">
+		<div className="relative w-full h-64 overflow-hidden">
 			<div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 z-10 vignette">
 				<span className="text-white text-3xl mb-4 font-semibold">СОВЕТ МОЛОДЫХ УЧЕНЫХ</span>
-				<div className="flex flex-col sm:flex-row gap-2">
-					<button
-						onClick={() => navigate("auth/signup/author")}
-						className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-					>
-						Стать автором
-					</button>
-					<button
-						onClick={() => navigate("auth/signup/mod")}
-						className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-					>
-						Стать модератором
-					</button>
-				</div>
+				{!user ? (
+					<div className="flex flex-col sm:flex-row gap-2">
+						<button
+							onClick={() => navigate("auth/signup/author")}
+							className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+						>
+							Стать автором
+						</button>
+						<button
+							onClick={() => navigate("auth/signup/mod")}
+							className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+						>
+							Стать модератором
+						</button>
+					</div>
+				) : (
+					<span className="text-white text-xl mb-4 font-semibold">
+						Добро пожаловать {user.firstName}
+					</span>
+				)}
 			</div>
 			<img
 				src={images[currentIndex].src}

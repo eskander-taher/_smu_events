@@ -62,10 +62,6 @@ const submissionSchema = new Schema(
 					required: true,
 					trim: true,
 				},
-				createdAt: {
-					type: Date,
-					default: Date.now,
-				},
 			},
 		],
 		file: {
@@ -74,8 +70,8 @@ const submissionSchema = new Schema(
 		},
 		status: {
 			type: String,
-			enum: ["pendding", "accepted", "rejected"],
-			default: "pendding",
+			enum: ["ожидание", "принято", "отклонено"],
+			default: "ожидание",
 		},
 		grade: {
 			type: Number,

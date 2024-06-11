@@ -8,11 +8,7 @@ const useLogin = () => {
     return axios({ url: `/login`, data: data, method: "POST" });
   };
 
-  const request = useMutation(userRequest,{
-    onSuccess:(data)=>{
-      console.log(data)
-    }
-  });
+  const request = useMutation(userRequest);
   return request;
 };
 

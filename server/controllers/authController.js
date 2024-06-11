@@ -16,6 +16,7 @@ const userRegistrationSchema = z.object({
 	middleName: z.string().min(1).optional(),
 	phoneNumber: z.string().min(1).optional(),
 	dateOfBirth: z.string().optional(),
+	bio: z.string().optional(),
 });
 
 const authorRegistrationSchema = userRegistrationSchema.extend({
@@ -101,6 +102,8 @@ exports.registerAuthor = async (req, res) => {
 		// Validating author input
 		let author = null;
 
+		console.log(req.body)
+
 		try {
 			author = authorRegistrationSchema.parse({
 				...req.body,
@@ -172,7 +175,7 @@ exports.registerMod = async (req, res) => {
 			createdMod = new Mod({
 				...mod,
 				password: hashedPassword,
-				role: "mod",
+				role: "модератор",
 			});
 
 			await createdMod.save();
@@ -275,7 +278,7 @@ exports.loginUser = async (req, res) => {
 			});
 		}
 
-		if (existingUser.role === "mod") {
+		if (existingUser.role === "модератор") {
 			if (!existingUser.verifiedByAdmin) {
 				return res.status(409).json({
 					success: false,
@@ -297,8 +300,11 @@ exports.loginUser = async (req, res) => {
 		// Generate JWT token
 		const token = jwt.sign(
 			{
-				...existingUser,
 				id: existingUser._id,
+				firstName: existingUser.firstName,
+				lastName: existingUser.lastName,
+				fullName: existingUser.fullName,
+				role: existingUser.role,
 			},
 			process.env.SECRET,
 			{
@@ -308,6 +314,7 @@ exports.loginUser = async (req, res) => {
 
 		res.json({
 			success: true,
+			message: "Вход прошел успешно.",
 			token,
 			role: existingUser.role,
 		});
@@ -347,7 +354,7 @@ exports.getAllUsers = async (req, res) => {
 
 exports.getAllMods = async (req, res) => {
 	try {
-		const users = await User.find({ role: "mod" });
+		const users = await User.find({ role: "модератор" });
 
 		res.json({
 			success: true,
@@ -361,7 +368,7 @@ exports.getAllMods = async (req, res) => {
 
 exports.getAllAuthors = async (req, res) => {
 	try {
-		const users = await User.find({ role: "author" });
+		const users = await User.find({ role: "автор" });
 
 		res.json({
 			success: true,

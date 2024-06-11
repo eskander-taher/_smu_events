@@ -1,16 +1,18 @@
 import { useState } from "react";
-import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb";
+import Title from "../../components/Title";
 import DefaultLayout from "../../layout/DefaultLayout";
 import RichEditor from "../../components/RichEditor";
 import useCreateEvent from "../../api/events/useCreateEvent";
 import useAuth from "../../hooks/useAuth";
 import useListModerators from "../../api/moderators/useListModerators";
+import { ToastContainer, toast } from "react-toastify";
 
 const AddEvent = () => {
 	const { user } = useAuth();
 	const [eventData, setEventData] = useState({
 		name: "",
 		description: "",
+		status: "",
 		sections: [{ order: "", name: "", mod: "" }],
 	});
 
@@ -48,6 +50,7 @@ const AddEvent = () => {
 		const payload = {
 			name: eventData.name,
 			description: eventData.description,
+			status: eventData.status,
 			createdBy: user.id,
 			sections: eventData.sections.map((section) => ({
 				order: parseFloat(section.order),
@@ -58,36 +61,56 @@ const AddEvent = () => {
 
 		mutate(payload, {
 			onSuccess: () => {
+				toast.success("Мероприятие добавлено успешно")
 				setEventData({
 					name: "",
 					description: "",
+					status: "",
 					sections: [{ order: "", name: "", mod: "" }],
 				});
 			},
+			onError: (error)=>{
+				console.log(error)
+				toast.error("Не удалось добавить мероприятие")
+			}
 		});
 	};
 
 	return (
 		<DefaultLayout>
-			<Breadcrumb pageName="Add Event" />
+			<Title>Добавить мероприятие</Title>
 			<div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-				<div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-					<h3 className="font-medium text-black dark:text-white">Event Form</h3>
-				</div>
 				<form onSubmit={handleSubmit}>
 					<div className="p-6.5">
 						<div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
 							<div className="w-full">
 								<label className="mb-2.5 block text-black dark:text-white">
-									Event name
+									Название мероприятия
 								</label>
 								<input
 									type="text"
-									placeholder="Enter event name"
+									placeholder="Введите название мероприятия"
 									value={eventData.name}
 									onChange={(e) => handleEventChange("name", e.target.value)}
 									className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
 								/>
+							</div>
+						</div>
+
+						<div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+							<div className="w-full">
+								<label className="mb-2.5 block text-black dark:text-white">
+									Статус мероприятия
+								</label>
+								<select
+									value={eventData.status}
+									onChange={(e) => handleEventChange("status", e.target.value)}
+									className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+								>
+									<option value="черновик">черновик</option>
+									<option value="предстоящий">предстоящий</option>
+									<option value="идет">идет</option>
+								</select>
 							</div>
 						</div>
 
@@ -98,11 +121,11 @@ const AddEvent = () => {
 							>
 								<div className="w-full xl:w-1/6">
 									<label className="mb-2.5 block text-black dark:text-white">
-										Section Number
+										Номер секции
 									</label>
 									<input
 										type="text"
-										placeholder="Enter section number"
+										placeholder="Введите номер секции"
 										value={section.order}
 										onChange={(e) =>
 											handleSectionChange(index, "order", e.target.value)
@@ -112,11 +135,11 @@ const AddEvent = () => {
 								</div>
 								<div className="w-full xl:w-1/3">
 									<label className="mb-2.5 block text-black dark:text-white">
-										Section name
+										Название секции
 									</label>
 									<input
 										type="text"
-										placeholder="Enter section name"
+										placeholder="Введите название секции"
 										value={section.name}
 										onChange={(e) =>
 											handleSectionChange(index, "name", e.target.value)
@@ -126,7 +149,7 @@ const AddEvent = () => {
 								</div>
 								<div className="w-full xl:w-1/3">
 									<label className="mb-2.5 block text-black dark:text-white">
-										Moderator name
+										Имя модератора
 									</label>
 									<div className="relative z-20 bg-white dark:bg-form-input">
 										<select
@@ -144,7 +167,7 @@ const AddEvent = () => {
 												disabled
 												className="text-body dark:text-bodydark"
 											>
-												Select Status
+												Выберите модератора
 											</option>
 											{isModsLoading ? (
 												<></>
@@ -155,7 +178,7 @@ const AddEvent = () => {
 														value={mod._id}
 														className="text-body dark:text-bodydark"
 													>
-														{mod.firstName}
+														{mod.fullName}
 													</option>
 												))
 											)}
@@ -185,7 +208,7 @@ const AddEvent = () => {
 									onClick={() => removeSection(index)}
 									className="py-2 px-3 mt-7 flex h-10 w-full items-center justify-center rounded bg-red-500 text-white hover:bg-red-600 xl:w-auto"
 								>
-									Remove
+									Удалить
 								</button>
 							</div>
 						))}
@@ -195,12 +218,12 @@ const AddEvent = () => {
 							onClick={addSection}
 							className="mb-4 flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
 						>
-							Add Section
+							Добавить секцию
 						</button>
 
 						<div className="mb-6">
 							<label className="mb-2.5 block text-black dark:text-white">
-								Description
+								Описание
 							</label>
 							<RichEditor
 								description={eventData.description}
@@ -213,10 +236,10 @@ const AddEvent = () => {
 								type="submit"
 								onClick={handleSubmit}
 								disabled={isLoading}
-								value={isLoading ? "Loading" : "Save and Submit"}
-								className={`w-full  rounded-lg border border-primary  p-4 text-white transition ${
+								value={isLoading ? "Загрузка" : "Сохранить и Отправить"}
+								className={`w-full rounded-lg border border-primary p-4 text-white transition ${
 									isLoading
-										? " bg-slate-500"
+										? "bg-slate-500"
 										: "bg-primary cursor-pointer hover:bg-opacity-90"
 								}`}
 							/>
@@ -224,6 +247,7 @@ const AddEvent = () => {
 					</div>
 				</form>
 			</div>
+			<ToastContainer position="top-center" autoClose={false} draggable />
 		</DefaultLayout>
 	);
 };

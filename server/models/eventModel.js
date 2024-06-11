@@ -14,13 +14,19 @@ const eventSchema = new Schema(
 		},
 		status: {
 			type: String,
-			enum: ["draft", "upcoming", "ongoing", "finished"],
-			default: "draft",
+			enum: ["черновик", "предстоящий", "идет", "проверка заявок", "завершен"],
+			default: "черновик",
 		},
 		sections: [
 			{
 				type: Schema.Types.ObjectId,
 				ref: "Section",
+			},
+		],
+		submissions: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: "Submission",
 			},
 		],
 		createdBy: {

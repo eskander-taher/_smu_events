@@ -2,14 +2,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const User = require('./userModel');
 
-/*
-Ассистент (Assistant)
-Старший преподаватель (Senior Lecturer)
-Доцент (Associate Professor)
-Профессор (Professor)
-Заведующий кафедрой (Head of Department)
-*/
-
 const modSchema = new Schema({
     faculty: {
         type: String,

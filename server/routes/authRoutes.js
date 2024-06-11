@@ -31,4 +31,5 @@ router.get("/users/authors", authController.getAllAuthors);
 // Delete all users route
 router.delete("/users", authController.deleteAllUsers);
 
+
 module.exports = router;

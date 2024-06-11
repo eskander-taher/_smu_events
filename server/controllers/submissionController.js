@@ -35,7 +35,7 @@ exports.createSubmission = async (req, res) => {
 			section: data.section,
 			comments: data.comments || [],
 			file: uniqueFilename,
-			status: data.status || "pendding",
+			status: data.status || "ожидание",
 			grade: data.grade,
 			grader: data.grader,
 		});
@@ -254,7 +254,7 @@ exports.gradeSubmissionById = async (req, res) => {
 
 exports.getAcceptedSubmissions = async (req, res) => {
 	try {
-		const submissions = await Submission.find({ status: "accepted" })
+		const submissions = await Submission.find({ status: "принято" })
 			.populate("author")
 			.populate("event")
 			.populate("section")
@@ -309,7 +309,6 @@ exports.getSubmissionsByMod = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
-
 
 exports.getAllSubmissionsGroupedBySection = async (req, res) => {
     try {
@@ -383,7 +382,7 @@ exports.getResultsByEvent = async (req, res) => {
 
     try {
         // Fetch all accepted submissions for the specified event
-        const submissions = await Submission.find({ status: "accepted", event: eventId })
+        const submissions = await Submission.find({ status: "принято", event: eventId })
             .populate("author")
             .populate("event")
             .populate("section")

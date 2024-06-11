@@ -1,23 +1,42 @@
 import DefaultLayout from "../../layout/DefaultLayout";
-import EventCard from "./EventCard";
-import useEventList from "../../api/events/useEventList";
+import usePublicEventList from "../../api/events/usePublicEventList";
 import Title from "../../components/Title";
+import Skeleton from "../../components/Skeleton";
+import LinkCard from "../../components/LinkCard";
+import formatDate from "../../utils/dateFormater";
 
 const Events = () => {
-	const { data, isLoading } = useEventList();
+	const { data, isLoading, isSuccess } = usePublicEventList();
+
+	let events = [];
+	if (isSuccess) {
+		events = data.data.data;
+	}
 
 	return (
 		<DefaultLayout>
 			<Title>Мероприятия</Title>
-			<div className="flex flex-wrap gap-5 flex-col">
+
+			<div className="flex flex-col gap-4 md:gap-6">
 				{isLoading ? (
-					<h1>Loading</h1>
+					<Skeleton />
+				) : isSuccess && events.length ? (
+					events
+						.slice()
+						.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+						.map((event) => {
+							return (
+								<LinkCard
+									key={event._id}
+									to={`/events/${event._id}`}
+									title={event.name}
+									subTitle={`${formatDate(event.createdAt)} | ${event.status}`}
+								/>
+							);
+						})
 				) : (
-					data?.data?.map((event) => {
-						return <EventCard {...event} key={event._id} />;
-					})
+					<p>Нет мероприятий для отображения</p>
 				)}
-				{!data && <h1>There are no events to view</h1>}
 			</div>
 		</DefaultLayout>
 	);

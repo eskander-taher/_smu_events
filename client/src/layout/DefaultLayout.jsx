@@ -1,8 +1,7 @@
-import React, { useState, ReactNode } from "react";
+import { useState } from "react";
 import Header from "../components/Header/index";
 import Sidebar from "../components/Sidebar/index";
 import useAuth from "../hooks/useAuth";
-import UnauthNavbar from "../components/Header/UnauthNavbar";
 
 const DefaultLayout = ({ children }) => {
 	const [sidebarOpen, setSidebarOpen] = useState(false);

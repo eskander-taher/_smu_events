@@ -11,12 +11,15 @@ router.put('/events/:id', eventController.updateEventById);
 // Get all events
 router.get('/events', eventController.getAllEvents);
 
+// Get all events
+router.get('/public-events', eventController.getPublicEvents);
+
 // Get a single event by id
 router.get('/events/:id', eventController.getEventById);
 router.put('/events/:id/:status', eventController.updateEventStatus);
 
 
-// // Delete an event by id
-// router.delete('/events/:id', eventController.deleteEventById);
+// Delete an event by id
+router.delete('/events/:id', eventController.deleteEventById);
 
 module.exports = router;

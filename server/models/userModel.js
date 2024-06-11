@@ -12,7 +12,6 @@ const userSchema = new Schema(
 			required: true,
 			unique: true,
 			trim: true,
-			match: [/.+@.+\..+/, "Please enter a valid email address"],
 		},
 		phoneNumber: {
 			type: String,
@@ -24,8 +23,8 @@ const userSchema = new Schema(
 		},
 		role: {
 			type: String,
-			enum: ["author", "admin", "mod"],
-			default: "author",
+			enum: ["автор", "админ", "модератор"],
+			default: "автор",
 		},
 		firstName: {
 			type: String,
@@ -42,11 +41,20 @@ const userSchema = new Schema(
 			trim: true,
 		},
 		dateOfBirth: {
-			type: Date,
+			type: String,
 		},
 		fullName: {
 			type: String,
 			trim: true,
+		},
+		bio: {
+			type: String,
+			trim: true,
+			default: "биография",
+		},
+		xp: {
+			type: Number,
+			default: 0,
 		},
 	},
 	{

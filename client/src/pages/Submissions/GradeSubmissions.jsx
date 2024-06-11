@@ -91,7 +91,7 @@ const GradeSubmissions = () => {
 								<option value="" disabled className="text-body dark:text-bodydark">
 									Select Section
 								</option>
-								{["accepted", "rejected"].map((status) => {
+								{["ожидание", "принято", "отклонено"].map((status) => {
 									return (
 										<option
 											value={status}

@@ -5,7 +5,7 @@ const PageTitle = ({ title }) => {
 	const location = useLocation();
 
 	useEffect(() => {
-		document.title = title + " | SMU";
+		document.title = title + " | СМУ";
 	}, [location, title]);
 
 	return null;

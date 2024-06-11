@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import useListSubmissionsByMod from "../../api/submissions/useListSubmissionsByMod";
-import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb";
+import Title from "../../components/Title";
 import DefaultLayout from "../../layout/DefaultLayout";
 import useAuth from "../../hooks/useAuth";
 import { baseURL } from "../../context/AxiosProvider";
@@ -10,7 +10,7 @@ function ModSubmissionList() {
 	const { data, isSuccess } = useListSubmissionsByMod(user?.id);
 	return (
 		<DefaultLayout>
-			<Breadcrumb pageName="Mod Submissions" />
+			<Title>Подачи</Title>
 			<table className="w-full table-auto">
 				<thead>
 					<tr className="bg-gray-2 text-left dark:bg-meta-4">

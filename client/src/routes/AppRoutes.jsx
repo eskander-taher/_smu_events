@@ -5,7 +5,7 @@ import { AdminRoute, ModRoute, AuthorRoute } from "./ProtectedRoutes";
 // pages
 import SignUpModerator from "../pages/Authentication/SignUpModerator";
 import SignUpAuthor from "../pages/Authentication/SignUpAuthor";
-import SignIn from "../pages/Authentication/SignIn";
+import Login from "../pages/Authentication/Login";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import Events from "../pages/Events/Events";
@@ -31,69 +31,77 @@ import Contacts from "../pages/Contacts";
 
 // Routes configuration
 export const routesConfig = [
-	{ path: "/", title: "Home", element: <Home /> },
-	{ path: "/events", title: "Events", element: <Events /> },
-	{ path: "/events/:eventId", title: "Events", element: <Event /> },
-	{ path: "/events-dashboard/add-event", title: "Add New Event", element: <AddEvent /> },
-	{ path: "/events-dashboard/event-list", title: "Event List", element: <EventList /> },
-	{ path: "/events-dashboard/edit-event/:eventId", title: "Edit Event", element: <EditEvent /> },
+	{ path: "/", title: "Главная", element: <Home /> },
+	{ path: "/events", title: "Мероприятия", element: <Events /> },
+	{ path: "/events/:eventId", title: "Мероприятие", element: <Event /> },
+	{
+		path: "/events-dashboard/add-event",
+		title: "Добавить новое мероприятие",
+		element: <AddEvent />,
+	},
+	{
+		path: "/events-dashboard/edit-event/:id",
+		title: "Редактировать мероприятие",
+		element: <EditEvent />,
+	},
+	{ path: "/events-dashboard/event-list", title: "Список Мероприятий", element: <EventList /> },
+	{
+		path: "/events-dashboard/edit-event/:eventId",
+		title: "Редактировать мероприятие",
+		element: <EditEvent />,
+	},
 	{
 		path: "/submission-list",
-		title: "Submission List",
+		title: "Список подачи",
 		element: <SubmissionList />,
 		// role: "admin",
 	},
 	{
 		path: "/author-submission-list",
-		title: "Author Submission List",
+		title: "Список подачи автора",
 		element: <AuthorSubmissionList />,
 		// role: "author",
 	},
 	{
 		path: "/mod-submission-list",
-		title: "Mod Submission List",
+		title: "Список подачи модератора",
 		element: <ModSubmissionList />,
 		// role: "mod",
 	},
 	{
-		path: "/submissions/add-submission",
-		title: "Add Submission",
+		path: "/events/:id/add-submission",
+		title: "Загрузить статью",
 		element: <AddSubmissions />,
 		// role: "author",
 	},
 	{
 		path: "/submissions/:subId/grade",
-		title: "Grade Submission",
+		title: "Оценить статью",
 		element: <GradeSubmissions />,
 		// role: "admin",
 	},
 	{
-		path: "/events/:eventId/add-submission",
-		title: "Add Submission",
-		// element: <AddSubmissions />,
-	},
-	{
 		path: "/moderators/moderator-list",
-		title: "Moderators List",
+		title: "Список модераторов",
 		element: <ModeratorsList />,
 		// role: "admin",
 	},
-	{ path: "/news/news-list", title: "News List", element: <NewsList /> },
-	{ path: "/news/add-news", title: "Add News", element: <NewsAdd /> },
-	{ path: "/news/:id", title: "News", element: <NewsDetail /> },
-	{ path: "/profile", title: "Profile", element: <Profile /> },
-	{ path: "/settings", title: "Settings", element: <Settings /> },
-	{ path: "/auth/signin", title: "Signin", element: <SignIn /> },
+	{ path: "/news/news-list", title: "Список новостей", element: <NewsList /> },
+	{ path: "/news/add-news", title: "Добавить новость", element: <NewsAdd /> },
+	{ path: "/news/:id", title: "Новость", element: <NewsDetail /> },
+	{ path: "/profile", title: "Профиль", element: <Profile /> },
+	{ path: "/settings", title: "Настройки", element: <Settings /> },
+	{ path: "/auth/login", title: "Вход", element: <Login /> },
 	{
 		path: "/auth/signup/mod",
-		title: "Signup Moderator",
+		title: "Регистрация модератора",
 		element: <SignUpModerator />,
 	},
-	{ path: "/auth/signup/author", title: "Signup Author", element: <SignUpAuthor /> },
-	{ path: "/about/goals", title: "Goals", element: <Goals /> },
-	{ path: "/about/activities", title: "Activities", element: <Activities/> },
-	{ path: "/about/staff", title: "Staff", element: <Staff /> },
-	{ path: "/contacts", title: "Contacts", element: <Contacts/> },
+	{ path: "/auth/signup/author", title: "Регистрация автора", element: <SignUpAuthor /> },
+	{ path: "/about/goals", title: "Цели", element: <Goals /> },
+	{ path: "/about/activities", title: "Деятельность", element: <Activities /> },
+	{ path: "/about/staff", title: "Команда", element: <Staff /> },
+	{ path: "/contacts", title: "Контакты", element: <Contacts /> },
 ];
 
 // Routes component

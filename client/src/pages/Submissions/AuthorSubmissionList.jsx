@@ -1,5 +1,5 @@
 import useListSubmissionsByAuthor from "../../api/submissions/useListSubmissionsByAuthor";
-import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb";
+import Title from "../../components/Title";
 import DefaultLayout from "../../layout/DefaultLayout";
 import useAuth from "../../hooks/useAuth";
 
@@ -9,7 +9,7 @@ function AuthorSubmissionList() {
 
 	return (
 		<DefaultLayout>
-			<Breadcrumb pageName="Author Submissions" />
+			<Title>Подачи</Title>
 			<table className="w-full table-auto">
 				<thead>
 					<tr className="bg-gray-2 text-left dark:bg-meta-4">

@@ -1,14 +1,6 @@
 const mongoose = require("mongoose");
 const Event = require("../models/eventModel");
 const Section = require("../models/sectionModel");
-const { z } = require("zod");
-
-const eventSchema = z.object({
-	name: z.string().min(1),
-	description: z.string().optional(),
-	status: z.enum(["draft", "upcoming", "ongoing", "finished"]).optional(),
-	createdBy: z.string(),
-});
 
 exports.createEvent = async (req, res) => {
 	const data = req.body;
@@ -20,7 +12,7 @@ exports.createEvent = async (req, res) => {
 		const event = new Event({
 			name: data.name,
 			description: data.description,
-			status: data.status || "draft",
+			status: data.status || "черновик",
 			createdBy: data.createdBy,
 		});
 
@@ -49,12 +41,17 @@ exports.createEvent = async (req, res) => {
 		await savedEvent.save({ session });
 
 		await session.commitTransaction();
-		res.json(savedEvent);
+		res.json({
+			success: true,
+			message: "Мероприятие успешно создано",
+			data: savedEvent,
+		});
 	} catch (error) {
 		await session.abortTransaction();
 		res.status(500).json({
-			error: "An error occurred while creating the event.",
-			details: error.message,
+			success: false,
+			message: "Произошла ошибка при создании Мероприятия.",
+			error: error.message,
 		});
 	} finally {
 		session.endSession();
@@ -76,7 +73,10 @@ exports.updateEventById = async (req, res) => {
 
 		if (!event) {
 			await session.abortTransaction();
-			return res.status(404).json({ error: "Event not found." });
+			return res.status(404).json({
+				success: false,
+				message: "Мероприятие не найдено.",
+			});
 		}
 
 		// Update event fields
@@ -102,9 +102,10 @@ exports.updateEventById = async (req, res) => {
 					} else {
 						// If section ID is provided but not found, abort transaction
 						await session.abortTransaction();
-						return res
-							.status(404)
-							.json({ error: `Section not found: ${sectionData._id}` });
+						return res.status(404).json({
+							success: false,
+							message: `Раздел не найден: ${sectionData._id}`,
+						});
 					}
 				} else {
 					// Create new section
@@ -126,19 +127,22 @@ exports.updateEventById = async (req, res) => {
 		const savedEvent = await event.save({ session });
 
 		await session.commitTransaction();
-		res.json(savedEvent);
+		res.json({
+			success: true,
+			message: "Мероприятие успешно обновлено",
+			data: savedEvent,
+		});
 	} catch (error) {
 		await session.abortTransaction();
 		res.status(500).json({
-			error: "An error occurred while updating the event.",
-			details: error.message,
+			success: false,
+			message: "Произошла ошибка при обновлении Мероприятия.",
+			error: error.message,
 		});
 	} finally {
 		session.endSession();
 	}
 };
-
-
 
 exports.getAllEvents = async (req, res) => {
 	try {
@@ -149,9 +153,39 @@ exports.getAllEvents = async (req, res) => {
 			})
 			.populate("createdBy") // Populate the createdBy field
 			.exec();
-		res.status(200).json(events);
+		res.status(200).json({
+			success: true,
+			message: "Мероприятия успешно получены",
+			data: events,
+		});
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при получении Мероприятий",
+			error: error.message,
+		});
+	}
+};
+exports.getPublicEvents = async (req, res) => {
+	try {
+		const events = await Event.find({ status: { $ne: "черновик" } })
+			.populate({
+				path: "sections",
+				populate: { path: "mod" }, // Populate the mods within each section
+			})
+			.populate("createdBy") // Populate the createdBy field
+			.exec();
+		res.status(200).json({
+			success: true,
+			message: "Мероприятия успешно получены",
+			data: events,
+		});
+	} catch (error) {
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при получении Мероприятий",
+			error: error.message,
+		});
 	}
 };
 
@@ -164,38 +198,62 @@ exports.getEventById = async (req, res) => {
 			})
 			.exec();
 		if (!event) {
-			return res.status(404).json({ error: "Event not found" });
+			return res.status(404).json({
+				success: false,
+				message: "Мероприятие не найдено",
+			});
 		}
-		res.status(200).json(event);
+		res.status(200).json({
+			success: true,
+			message: "Мероприятие успешно получено",
+			data: event,
+		});
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при получении Мероприятия",
+			error: error.message,
+		});
 	}
 };
 
 exports.updateEventStatus = async (req, res) => {
 	try {
-	  const { id, status } = req.params;
-  
-	  // Validate the new status
-	  const allowedStatuses = ["draft", "upcoming", "ongoing", "finished"];
-	  if (!allowedStatuses.includes(status)) {
-		return res.status(400).json({ error: "Invalid status value" });
-	  }
-  
-	  const event = await Event.findById(id);
-	  if (!event) {
-		return res.status(404).json({ error: "Event not found" });
-	  }
-  
-	  event.status = status;
-	  await event.save();
-  
-	  res.status(200).json({ message: "Event status updated successfully", event });
+		const { id, status } = req.params;
+
+		// Validate the new status
+		const allowedStatuses = ["черновик", "предстоящий", "идет", "проверка заявок", "завершен"];
+		if (!allowedStatuses.includes(status)) {
+			return res.status(400).json({
+				success: false,
+				message: "Неверное значение статуса",
+			});
+		}
+
+		const event = await Event.findById(id);
+		if (!event) {
+			return res.status(404).json({
+				success: false,
+				message: "Мероприятие не найдено",
+			});
+		}
+
+		event.status = status;
+		await event.save();
+
+		res.status(200).json({
+			success: true,
+			message: "Статус Мероприятия успешно обновлен",
+			data: event,
+		});
 	} catch (error) {
-	  res.status(500).json({ error: error.message });
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при обновлении статуса Мероприятия",
+			error: error.message,
+		});
 	}
-  };
-  
+};
 
 exports.deleteEventById = async (req, res) => {
 	const session = await mongoose.startSession();
@@ -206,19 +264,29 @@ exports.deleteEventById = async (req, res) => {
 		if (!event) {
 			await session.abortTransaction();
 			session.endSession();
-			return res.status(404).json({ error: "Event not found" });
+			return res.status(404).json({
+				success: false,
+				message: "Мероприятие не найдено",
+			});
 		}
 
 		await Section.deleteMany({ event: event._id }, { session });
-		await event.remove({ session });
-
+		await Event.deleteOne({ _id: req.params.id }, { session });
 		await session.commitTransaction();
 		session.endSession();
 
-		res.status(200).json({ message: "Event and associated sections deleted" });
+		res.status(200).json({
+			success: true,
+			message: "Мероприятие и связанные разделы удалены",
+		});
 	} catch (error) {
 		await session.abortTransaction();
 		session.endSession();
-		res.status(500).json({ error: error.message });
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при удалении Мероприятия",
+			error: error.message,
+		});
 	}
 };
+

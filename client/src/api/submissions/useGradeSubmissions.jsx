@@ -5,7 +5,6 @@ const useGradeSubmissions = () => {
   const axios = useAxios();
 
   const gradeSubmissionRequest = (data) => {
-    console.log(data)
     return axios({
       url: `/submissions/grade/${data.subId}`,
       data: data.payload,
