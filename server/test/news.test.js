@@ -27,7 +27,7 @@ describe('News API', () => {
       .send({
         title: 'Test News Title',
         content: 'Test News Content',
-        createdBy: '60d0fe4f5311236168a109ca', // Example user ID, adjust as necessary
+        createdBy: '60d0fe4f5311236168a109ca', // Example user ID,
       });
 
     expect(response.status).toBe(201);
@@ -95,3 +95,4 @@ describe('News API', () => {
     expect(response.body.message).toBe('News item deleted successfully');
   });
 });
+

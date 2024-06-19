@@ -8,9 +8,11 @@ import { baseURL } from "../../context/AxiosProvider";
 function ModSubmissionList() {
 	const { user } = useAuth();
 	const { data, isSuccess } = useListSubmissionsByMod(user?.id);
+	let submissions = isSuccess ? data.data.data : [];
+
 	return (
 		<DefaultLayout>
-			<Title>Подачи</Title>
+			<Title>Статьи</Title>
 			<table className="w-full table-auto">
 				<thead>
 					<tr className="bg-gray-2 text-left dark:bg-meta-4">
@@ -36,7 +38,7 @@ function ModSubmissionList() {
 				</thead>
 				<tbody>
 					{isSuccess ? (
-						data?.data?.map((item) => (
+						submissions.map((item) => (
 							<tr key={item._id}>
 								<td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
 									<h5 className="font-medium text-black dark:text-white">
@@ -55,7 +57,7 @@ function ModSubmissionList() {
 								</td>
 								<td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
 									<h5 className="font-medium text-black dark:text-white">
-										{item.section.name}
+										{`${item.section.order}. ${item.section.name}`}
 									</h5>
 								</td>
 								<td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">

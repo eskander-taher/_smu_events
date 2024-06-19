@@ -10,6 +10,7 @@ import { CiSettings } from "react-icons/ci";
 import SMU_LOGO from "../../images/assets/logo_dark_mode.png";
 
 import useAuth from "../../hooks/useAuth";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 const SidebarLinkGroup = ({ children, activeCondition }) => {
 	const [open, setOpen] = useState(activeCondition);
@@ -132,7 +133,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 													: setSidebarExpanded(true)
 											}
 										>
-											<IoPersonOutline />
+											<AiOutlineExclamationCircle />
 											О СМУ
 											<IoIosArrowDown
 												className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
@@ -202,8 +203,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 					{user && (
 						<div>
 							<h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
-								Панель приборов
+								Панель приборов: {user.role}
 							</h3>
+
 							<ul className="mb-6 flex flex-col gap-1.5">
 								<li>
 									<NavLink
@@ -217,206 +219,243 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 										Профиль
 									</NavLink>
 								</li>
-								<SidebarLinkGroup
-									activeCondition={
-										pathname === "/events-dashboard" ||
-										pathname.includes("/events-dashboard")
-									}
-								>
-									{(handleClick, open) => (
-										<>
-											<div
-												className="relative flex items-center gap-2.5 px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out cursor-pointer hover:bg-graydark dark:hover:bg-meta-4"
-												onClick={() =>
-													sidebarExpanded
-														? handleClick()
-														: setSidebarExpanded(true)
-												}
-											>
-												<BsCalendar3Event />
-												Мероприятия
-												<IoIosArrowDown
-													className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
-														open && "rotate-180"
-													}`}
-												/>
-											</div>
-											<div
-												className={`translate transform overflow-hidden ${
-													!open && "hidden"
-												}`}
-											>
-												<ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-													<li>
-														<NavLink
-															to="/events-dashboard/event-list"
-															className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-																pathname.includes(
-																	"/events-dashboard/event-list"
-																) && "bg-graydark dark:bg-meta-4"
-															}`}
-														>
-															Список мероприятия
-														</NavLink>
-													</li>
-													<li>
-														<NavLink
-															to="/events-dashboard/add-event"
-															className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-																pathname.includes(
-																	"/events-dashboard/add-event"
-																) && "bg-graydark dark:bg-meta-4"
-															}`}
-														>
-															Добавить мероприятия
-														</NavLink>
-													</li>
-												</ul>
-											</div>
-										</>
-									)}
-								</SidebarLinkGroup>
-								<li>
-									<NavLink
-										to="/submission-list"
-										className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-											pathname.includes("submission-list") &&
-											"bg-graydark dark:bg-meta-4"
-										}`}
+
+								{user.role === "админ" && (
+									<SidebarLinkGroup
+										activeCondition={
+											pathname === "/events-dashboard" ||
+											pathname.includes("/events-dashboard")
+										}
 									>
-										<SlDocs />
-										Подачи
-									</NavLink>
-								</li>
-								<li>
-									<NavLink
-										to="/author-submission-list"
-										className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-											pathname.includes("author-submission-list") &&
-											"bg-graydark dark:bg-meta-4"
-										}`}
-									>
-										<SlDocs />
-										Подачи автора
-									</NavLink>
-								</li>
-								<li>
-									<NavLink
-										to="/mod-submission-list"
-										className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-											pathname.includes("mod-submission-list") &&
-											"bg-graydark dark:bg-meta-4"
-										}`}
-									>
-										<SlDocs />
-										Подачи модератора
-									</NavLink>
-								</li>
-								<SidebarLinkGroup
-									activeCondition={
-										pathname === "/moderators" ||
-										pathname.includes("/moderators")
-									}
-								>
-									{(handleClick, open) => (
-										<>
-											<div
-												className="relative flex items-center gap-2.5 px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out cursor-pointer hover:bg-graydark dark:hover:bg-meta-4"
-												onClick={() =>
-													sidebarExpanded
-														? handleClick()
-														: setSidebarExpanded(true)
-												}
-											>
-												<LuUserCheck />
-												Модераторы
-												<IoIosArrowDown
-													className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
-														open && "rotate-180"
+										{(handleClick, open) => (
+											<>
+												<div
+													className="relative flex items-center gap-2.5 px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out cursor-pointer hover:bg-graydark dark:hover:bg-meta-4"
+													onClick={() =>
+														sidebarExpanded
+															? handleClick()
+															: setSidebarExpanded(true)
+													}
+												>
+													<BsCalendar3Event />
+													Мероприятия
+													<IoIosArrowDown
+														className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
+															open && "rotate-180"
+														}`}
+													/>
+												</div>
+												<div
+													className={`translate transform overflow-hidden ${
+														!open && "hidden"
 													}`}
-												/>
-											</div>
-											<div
-												className={`translate transform overflow-hidden ${
-													!open && "hidden"
-												}`}
-											>
-												<ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-													<li>
-														<NavLink
-															to="/moderators/moderator-list"
-															className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-																pathname.includes(
-																	"/moderators/moderator-list"
-																) && "bg-graydark dark:bg-meta-4"
-															}`}
-														>
-															Список модераторов
-														</NavLink>
-													</li>
-												</ul>
-											</div>
-										</>
-									)}
-								</SidebarLinkGroup>
-								<SidebarLinkGroup
-									activeCondition={
-										pathname === "/news" || pathname.includes("/news")
-									}
-								>
-									{(handleClick, open) => (
-										<>
-											<div
-												className="relative flex items-center gap-2.5 px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out cursor-pointer hover:bg-graydark dark:hover:bg-meta-4"
-												onClick={() =>
-													sidebarExpanded
-														? handleClick()
-														: setSidebarExpanded(true)
-												}
-											>
-												<FaRegNewspaper />
-												Новости
-												<IoIosArrowDown
-													className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
-														open && "rotate-180"
+												>
+													<ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+														<li>
+															<NavLink
+																to="/events-dashboard/event-list"
+																className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+																	pathname.includes(
+																		"/events-dashboard/event-list"
+																	) &&
+																	"bg-graydark dark:bg-meta-4"
+																}`}
+															>
+																Список мероприятия
+															</NavLink>
+														</li>
+														<li>
+															<NavLink
+																to="/events-dashboard/add-event"
+																className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+																	pathname.includes(
+																		"/events-dashboard/add-event"
+																	) &&
+																	"bg-graydark dark:bg-meta-4"
+																}`}
+															>
+																Добавить мероприятия
+															</NavLink>
+														</li>
+													</ul>
+												</div>
+											</>
+										)}
+									</SidebarLinkGroup>
+								)}
+
+								{user.role === "админ" && (
+									<li>
+										<NavLink
+											to="/submission-list"
+											className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+												pathname.includes("submission-list") &&
+												"bg-graydark dark:bg-meta-4"
+											}`}
+										>
+											<SlDocs />
+											Статьи
+										</NavLink>
+									</li>
+								)}
+
+								{user.role === "автор" && (
+									<li>
+										<NavLink
+											to="/author-submission-list"
+											className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+												pathname.includes("author-submission-list") &&
+												"bg-graydark dark:bg-meta-4"
+											}`}
+										>
+											<SlDocs />
+											Статьи
+										</NavLink>
+									</li>
+								)}
+
+								{user.role === "модератор" && (
+									<li>
+										<NavLink
+											to="/mod-submission-list"
+											className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+												pathname.includes("mod-submission-list") &&
+												"bg-graydark dark:bg-meta-4"
+											}`}
+										>
+											<SlDocs />
+											Статьи
+										</NavLink>
+									</li>
+								)}
+
+								{user.role === "админ" && (
+									<SidebarLinkGroup
+										activeCondition={
+											pathname === "/users" ||
+											pathname.includes("/users")
+										}
+									>
+										{(handleClick, open) => (
+											<>
+												<div
+													className="relative flex items-center gap-2.5 px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out cursor-pointer hover:bg-graydark dark:hover:bg-meta-4"
+													onClick={() =>
+														sidebarExpanded
+															? handleClick()
+															: setSidebarExpanded(true)
+													}
+												>
+													<LuUserCheck />
+													Пользователи
+													<IoIosArrowDown
+														className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
+															open && "rotate-180"
+														}`}
+													/>
+												</div>
+												<div
+													className={`translate transform overflow-hidden ${
+														!open && "hidden"
 													}`}
-												/>
-											</div>
-											<div
-												className={`translate transform overflow-hidden ${
-													!open && "hidden"
-												}`}
-											>
-												<ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-													<li>
-														<NavLink
-															to="/news/news-list"
-															className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-																pathname.includes(
-																	"/news/news-list"
-																) && "bg-graydark dark:bg-meta-4"
-															}`}
-														>
-															Список новостей
-														</NavLink>
-													</li>
-													<li>
-														<NavLink
-															to="/news/add-news"
-															className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-																pathname.includes(
-																	"/news/add-news"
-																) && "bg-graydark dark:bg-meta-4"
-															}`}
-														>
-															Добавить новость
-														</NavLink>
-													</li>
-												</ul>
-											</div>
-										</>
-									)}
-								</SidebarLinkGroup>
+												>
+													<ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+														<li>
+															<NavLink
+																to="/users/moderator-list"
+																className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+																	pathname.includes(
+																		"/users/moderator-list"
+																	) &&
+																	"bg-graydark dark:bg-meta-4"
+																}`}
+															>
+																Список модераторов
+															</NavLink>
+														</li>
+														<li>
+															<NavLink
+																to="/users/author-list"
+																className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+																	pathname.includes(
+																		"/users/author-list"
+																	) &&
+																	"bg-graydark dark:bg-meta-4"
+																}`}
+															>
+																Список авторов
+															</NavLink>
+														</li>
+													</ul>
+												</div>
+											</>
+										)}
+									</SidebarLinkGroup>
+								)}
+
+								{user.role === "админ" && (
+									<SidebarLinkGroup
+										activeCondition={
+											pathname === "/news" || pathname.includes("/news")
+										}
+									>
+										{(handleClick, open) => (
+											<>
+												<div
+													className="relative flex items-center gap-2.5 px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out cursor-pointer hover:bg-graydark dark:hover:bg-meta-4"
+													onClick={() =>
+														sidebarExpanded
+															? handleClick()
+															: setSidebarExpanded(true)
+													}
+												>
+													<FaRegNewspaper />
+													Новости
+													<IoIosArrowDown
+														className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
+															open && "rotate-180"
+														}`}
+													/>
+												</div>
+												<div
+													className={`translate transform overflow-hidden ${
+														!open && "hidden"
+													}`}
+												>
+													<ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+														<li>
+															<NavLink
+																to="/news/news-list"
+																className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+																	pathname.includes(
+																		"/news/news-list"
+																	) &&
+																	"bg-graydark dark:bg-meta-4"
+																}`}
+															>
+																Список новостей
+															</NavLink>
+														</li>
+														<li>
+															<NavLink
+																to="/news/add-news"
+																className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+																	pathname.includes(
+																		"/news/add-news"
+																	) &&
+																	"bg-graydark dark:bg-meta-4"
+																}`}
+															>
+																Добавить новость
+															</NavLink>
+														</li>
+													</ul>
+												</div>
+											</>
+										)}
+									</SidebarLinkGroup>
+								)}
+
 								<li>
 									<NavLink
 										to="/settings"

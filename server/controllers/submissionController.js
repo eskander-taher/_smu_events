@@ -19,7 +19,7 @@ exports.createSubmission = async (req, res) => {
 
 			await file.mv(filepath, (err) => {
 				if (err) {
-					throw new Error("File upload failed");
+					throw new Error("Загрузка файла не удалась");
 				}
 			});
 		}
@@ -43,12 +43,17 @@ exports.createSubmission = async (req, res) => {
 		const savedSubmission = await submission.save({ session });
 
 		await session.commitTransaction();
-		res.json(savedSubmission);
+		res.json({
+			success: true,
+			message: "Успешное создание Статьи",
+			data: savedSubmission,
+		});
 	} catch (error) {
 		await session.abortTransaction();
 		res.status(500).json({
-			error: "An error occurred while creating the submission.",
-			details: error.message,
+			success: false,
+			message: "Произошла ошибка при создании Статьи.",
+			error: error.message,
 		});
 	} finally {
 		session.endSession();
@@ -67,7 +72,11 @@ exports.updateSubmissionById = async (req, res) => {
 
 		if (!submission) {
 			await session.abortTransaction();
-			return res.status(404).json({ error: "Submission not found." });
+			return res.status(404).json({
+				success: false,
+				message: "Заявка не найдена.",
+				error: "Submission not found.",
+			});
 		}
 
 		// Check for file upload
@@ -78,7 +87,7 @@ exports.updateSubmissionById = async (req, res) => {
 
 			await file.mv(filepath, (err) => {
 				if (err) {
-					throw new Error("File upload failed");
+					throw new Error("Загрузка файла не удалась");
 				}
 			});
 
@@ -104,12 +113,17 @@ exports.updateSubmissionById = async (req, res) => {
 		const savedSubmission = await submission.save({ session });
 
 		await session.commitTransaction();
-		res.json(savedSubmission);
+		res.json({
+			success: true,
+			message: "Успешное обновление Статьи",
+			data: savedSubmission,
+		});
 	} catch (error) {
 		await session.abortTransaction();
 		res.status(500).json({
-			error: "An error occurred while updating the submission.",
-			details: error.message,
+			success: false,
+			message: "Произошла ошибка при обновлении Статьи.",
+			error: error.message,
 		});
 	} finally {
 		session.endSession();
@@ -128,9 +142,17 @@ exports.getAllSubmissions = async (req, res) => {
 			})
 			.populate("grader")
 			.exec();
-		res.status(200).json(submissions);
+		res.status(200).json({
+			success: true,
+			message: "Все Статьи успешно получены",
+			data: submissions,
+		});
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при получении всех Статьи",
+			error: error.message,
+		});
 	}
 };
 
@@ -147,11 +169,23 @@ exports.getSubmissionById = async (req, res) => {
 			.populate("grader")
 			.exec();
 		if (!submission) {
-			return res.status(404).json({ error: "Submission not found" });
+			return res.status(404).json({
+				success: false,
+				message: "Заявка не найдена",
+				error: "Submission not found",
+			});
 		}
-		res.status(200).json(submission);
+		res.status(200).json({
+			success: true,
+			message: "Заявка успешно получена",
+			data: submission,
+		});
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при получении Статьи",
+			error: error.message,
+		});
 	}
 };
 
@@ -171,12 +205,24 @@ exports.getSubmissionsBySection = async (req, res) => {
 			.exec();
 
 		if (!submissions) {
-			return res.status(404).json({ error: "No submissions found for this section" });
+			return res.status(404).json({
+				success: false,
+				message: "Статьи для этого раздела не найдены",
+				error: "No submissions found for this section",
+			});
 		}
 
-		res.status(200).json(submissions);
+		res.status(200).json({
+			success: true,
+			message: "Статьи по разделу успешно получены",
+			data: submissions,
+		});
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при получении Статьи по разделу",
+			error: error.message,
+		});
 	}
 };
 
@@ -195,13 +241,25 @@ exports.getSubmissionsByAuthor = async (req, res) => {
 			.populate("grader")
 			.exec();
 
-		if (!submissions || submissions.length === 0) {
-			return res.status(404).json({ error: "No submissions found for this author" });
+		if (!submissions) {
+			return res.status(404).json({
+				success: false,
+				message: "Статьи для этого автора не найдены",
+				error: "No submissions found for this author",
+			});
 		}
 
-		res.status(200).json(submissions);
+		res.status(200).json({
+			success: true,
+			message: "Статьи по автору успешно получены",
+			data: submissions,
+		});
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при получении Статьи по автору",
+			error: error.message,
+		});
 	}
 };
 
@@ -221,7 +279,11 @@ exports.gradeSubmissionById = async (req, res) => {
 
 		if (!submission) {
 			await session.abortTransaction();
-			return res.status(404).json({ error: "Submission not found." });
+			return res.status(404).json({
+				success: false,
+				message: "Заявка не найдена.",
+				error: "Submission not found.",
+			});
 		}
 
 		// Update the grade and status
@@ -240,12 +302,17 @@ exports.gradeSubmissionById = async (req, res) => {
 		const savedSubmission = await submission.save({ session });
 
 		await session.commitTransaction();
-		res.status(200).json(savedSubmission);
+		res.status(200).json({
+			success: true,
+			message: "Оценка Статьи успешно обновлена",
+			data: savedSubmission,
+		});
 	} catch (error) {
 		await session.abortTransaction();
 		res.status(500).json({
-			error: "An error occurred while grading the submission.",
-			details: error.message,
+			success: false,
+			message: "Произошла ошибка при оценке Статьи.",
+			error: error.message,
 		});
 	} finally {
 		session.endSession();
@@ -266,12 +333,24 @@ exports.getAcceptedSubmissions = async (req, res) => {
 			.exec();
 
 		if (!submissions || submissions.length === 0) {
-			return res.status(404).json({ error: "No accepted submissions found" });
+			return res.status(404).json({
+				success: false,
+				message: "Принятые Статьи не найдены",
+				error: "No accepted submissions found",
+			});
 		}
 
-		res.status(200).json(submissions);
+		res.status(200).json({
+			success: true,
+			message: "Принятые Статьи успешно получены",
+			data: submissions,
+		});
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при получении принятых Статьи",
+			error: error.message,
+		});
 	}
 };
 
@@ -283,7 +362,11 @@ exports.getSubmissionsByMod = async (req, res) => {
 		const sections = await mongoose.model("Section").find({ mod: modId }).exec();
 
 		if (!sections || sections.length === 0) {
-			return res.status(404).json({ error: "No sections found for this moderator" });
+			return res.status(404).json({
+				success: false,
+				message: "Разделы для этого модератора не найдены",
+				error: "No sections found for this moderator",
+			});
 		}
 
 		const sectionIds = sections.map((section) => section._id);
@@ -300,57 +383,76 @@ exports.getSubmissionsByMod = async (req, res) => {
 			.populate("grader")
 			.exec();
 
-		if (!submissions || submissions.length === 0) {
-			return res.status(404).json({ error: "No submissions found for this moderator" });
+		if (!submissions) {
+			return res.status(404).json({
+				success: false,
+				message: "Статьи для этого модератора не найдены",
+				error: "No submissions found for this moderator",
+			});
 		}
 
-		res.status(200).json(submissions);
+		res.status(200).json({
+			success: true,
+			message: "Статьи по модератору успешно получены",
+			data: submissions,
+		});
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при получении Статьи по модератору",
+			error: error.message,
+		});
 	}
 };
 
 exports.getAllSubmissionsGroupedBySection = async (req, res) => {
-    try {
-        // Fetch all submissions
-        const submissions = await Submission.find()
-            .populate("author")
-            .populate("event")
-            .populate("section")
-            .populate({
-                path: "comments",
-                populate: { path: "moderator" },
-            })
-            .populate("grader")
-            .exec();
+	try {
+		// Fetch all submissions
+		const submissions = await Submission.find()
+			.populate("author")
+			.populate("event")
+			.populate("section")
+			.populate({
+				path: "comments",
+				populate: { path: "moderator" },
+			})
+			.populate("grader")
+			.exec();
 
-        // Group submissions by section
-        const groupedBySection = submissions.reduce((acc, submission) => {
-            const section = submission.section;
+		// Group submissions by section
+		const groupedBySection = submissions.reduce((acc, submission) => {
+			const section = submission.section;
 
-            // Find if the section already exists in the accumulator
-            const sectionGroup = acc.find(group => group.section._id.equals(section._id));
+			// Find if the section already exists in the accumulator
+			const sectionGroup = acc.find((group) => group.section._id.equals(section._id));
 
-            if (sectionGroup) {
-                // If the section group exists, add the submission to it
-                sectionGroup.submissions.push(submission);
-            } else {
-                // If the section group does not exist, create a new one
-                acc.push({
-                    section: section,
-                    submissions: [submission]
-                });
-            }
+			if (sectionGroup) {
+				// If the section group exists, add the submission to it
+				sectionGroup.submissions.push(submission);
+			} else {
+				// If the section group does not exist, create a new one
+				acc.push({
+					section: section,
+					submissions: [submission],
+				});
+			}
 
-            return acc;
-        }, []);
+			return acc;
+		}, []);
 
-        res.status(200).json(groupedBySection);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+		res.status(200).json({
+			success: true,
+			message: "Статьи, сгруппированные по разделу, успешно получены",
+			data: groupedBySection,
+		});
+	} catch (error) {
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при группировке Статьи по разделам",
+			error: error.message,
+		});
+	}
 };
-
 
 exports.deleteSubmissionById = async (req, res) => {
 	const session = await mongoose.startSession();
@@ -361,7 +463,11 @@ exports.deleteSubmissionById = async (req, res) => {
 		if (!submission) {
 			await session.abortTransaction();
 			session.endSession();
-			return res.status(404).json({ error: "Submission not found" });
+			return res.status(404).json({
+				success: false,
+				message: "Заявка не найдена",
+				error: "Submission not found",
+			});
 		}
 
 		await submission.remove({ session });
@@ -369,97 +475,112 @@ exports.deleteSubmissionById = async (req, res) => {
 		await session.commitTransaction();
 		session.endSession();
 
-		res.status(200).json({ message: "Submission deleted" });
+		res.status(200).json({
+			success: true,
+			message: "Заявка успешно удалена",
+		});
 	} catch (error) {
 		await session.abortTransaction();
 		session.endSession();
-		res.status(500).json({ error: error.message });
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при удалении Статьи",
+			error: error.message,
+		});
 	}
 };
 
 exports.getResultsByEvent = async (req, res) => {
-    const eventId = req.params.eventId;
+	const eventId = req.params.eventId;
 
-    try {
-        // Fetch all accepted submissions for the specified event
-        const submissions = await Submission.find({ status: "принято", event: eventId })
-            .populate("author")
-            .populate("event")
-            .populate("section")
-            .populate({
-                path: "comments",
-                populate: { path: "mod" },
-            })
-            .populate("grader")
-            .exec();
+	try {
+		// Fetch all accepted submissions for the specified event
+		const submissions = await Submission.find({ status: "принято", event: eventId })
+			.populate("author")
+			.populate("event")
+			.populate("section")
+			.populate({
+				path: "comments",
+				populate: { path: "mod" },
+			})
+			.populate("grader")
+			.exec();
 
-        // Group submissions by section
-        const groupedBySection = submissions.reduce((acc, submission) => {
-            const section = submission.section;
+		// Group submissions by section
+		const groupedBySection = submissions.reduce((acc, submission) => {
+			const section = submission.section;
 
-            // Find if the section already exists in the accumulator
-            const sectionGroup = acc.find(group => group.section._id.equals(section._id));
+			// Find if the section already exists in the accumulator
+			const sectionGroup = acc.find((group) => group.section._id.equals(section._id));
 
-            if (sectionGroup) {
-                // If the section group exists, add the submission to it
-                sectionGroup.submissions.push(submission);
-            } else {
-                // If the section group does not exist, create a new one
-                acc.push({
-                    section: section,
-                    submissions: [submission]
-                });
-            }
+			if (sectionGroup) {
+				// If the section group exists, add the submission to it
+				sectionGroup.submissions.push(submission);
+			} else {
+				// If the section group does not exist, create a new one
+				acc.push({
+					section: section,
+					submissions: [submission],
+				});
+			}
 
-            return acc;
-        }, []);
+			return acc;
+		}, []);
 
-        // Determine winners for each section
-        const results = groupedBySection.map(group => {
-            // Sort submissions by grade in descending order
-            const sortedSubmissions = group.submissions.sort((a, b) => b.grade - a.grade);
+		// Determine winners for each section
+		const results = groupedBySection.map((group) => {
+			// Sort submissions by grade in descending order
+			const sortedSubmissions = group.submissions.sort((a, b) => b.grade - a.grade);
 
-            // Determine the winners
-            let winners = { first: [], second: [], third: [] };
-            let currentRank = 1;
+			// Determine the winners
+			let winners = { first: [], second: [], third: [] };
+			let currentRank = 1;
 
-            sortedSubmissions.forEach((submission, index) => {
-                if (index === 0) {
-                    winners.first.push(submission);
-                } else {
-                    const previousSubmission = sortedSubmissions[index - 1];
-                    if (submission.grade === previousSubmission.grade) {
-                        if (currentRank === 1) {
-                            winners.first.push(submission);
-                        } else if (currentRank === 2) {
-                            winners.second.push(submission);
-                        } else {
-                            winners.third.push(submission);
-                        }
-                    } else {
-                        if (winners.second.length === 0) {
-                            currentRank = 2;
-                            winners.second.push(submission);
-                        } else if (winners.third.length === 0) {
-                            currentRank = 3;
-                            winners.third.push(submission);
-                        } else {
-                            return;
-                        }
-                    }
-                }
-            });
+			sortedSubmissions.forEach((submission, index) => {
+				if (index === 0) {
+					winners.first.push(submission);
+				} else {
+					const previousSubmission = sortedSubmissions[index - 1];
+					if (submission.grade === previousSubmission.grade) {
+						if (currentRank === 1) {
+							winners.first.push(submission);
+						} else if (currentRank === 2) {
+							winners.second.push(submission);
+						} else {
+							winners.third.push(submission);
+						}
+					} else {
+						if (winners.second.length === 0) {
+							currentRank = 2;
+							winners.second.push(submission);
+						} else if (winners.third.length === 0) {
+							currentRank = 3;
+							winners.third.push(submission);
+						} else {
+							return;
+						}
+					}
+				}
+			});
 
-            return {
-                section: group.section,
-                winners: winners
-            };
-        });
+			return {
+				section: group.section,
+				winners: winners,
+			};
+		});
 
-        res.status(200).json(results);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+		res.status(200).json({
+			success: true,
+			message: "Результаты мероприятия успешно получены",
+			data: results,
+		});
+	} catch (error) {
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при получении результатов мероприятия",
+			error: error.message,
+		});
+	}
 };
 
 exports.downloadSubmissionFile = async (req, res) => {
@@ -469,3 +590,90 @@ exports.downloadSubmissionFile = async (req, res) => {
 	res.download(filepath);
 };
 
+exports.getSubmissionsByEvent = async (req, res) => {
+	const eventId = req.params.eventId;
+
+	try {
+		const submissions = await Submission.find({ event: eventId })
+			.populate("author")
+			.populate("event")
+			.populate("section")
+			.populate({
+				path: "comments",
+				populate: { path: "mod" },
+			})
+			.populate("grader")
+			.exec();
+
+		if (!submissions) {
+			return res.status(404).json({
+				success: false,
+				message: "Статьи  не найдены",
+				error: "No submissions found ",
+			});
+		}
+
+		res.status(200).json({
+			success: true,
+			message: "Статьи успешно получены",
+			data: submissions,
+		});
+	} catch (error) {
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при получении Статьи",
+			error: error.message,
+		});
+	}
+};
+
+exports.getSubmissionsByEventAndMod = async (req, res) => {
+	const { eventId, modId } = req.params;
+
+	try {
+		// Fetch sections where the mod matches the provided modId
+		const sections = await mongoose.model("Section").find({ mod: modId }).exec();
+
+		if (!sections) {
+			return res.status(404).json({
+				success: false,
+				message: "Разделы для этого модератора не найдены",
+				error: "No sections found for this moderator",
+			});
+		}
+
+		const sectionIds = sections.map((section) => section._id);
+
+		// Find submissions for the specified event and fetched sections
+		const submissions = await Submission.find({ event: eventId, section: { $in: sectionIds } })
+			.populate("author")
+			.populate("event")
+			.populate("section")
+			.populate({
+				path: "comments",
+				populate: { path: "mod" },
+			})
+			.populate("grader")
+			.exec();
+
+		if (!submissions) {
+			return res.status(404).json({
+				success: false,
+				message: "Статьи не найдены для указанного события и модератора",
+				error: "No submissions found for the specified event and moderator",
+			});
+		}
+
+		res.status(200).json({
+			success: true,
+			message: "Статьи успешно получены",
+			data: submissions,
+		});
+	} catch (error) {
+		res.status(500).json({
+			success: false,
+			message: "Произошла ошибка при получении Статьи",
+			error: error.message,
+		});
+	}
+};

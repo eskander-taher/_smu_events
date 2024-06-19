@@ -60,14 +60,16 @@ const AuthorSignupForm = () => {
 			toast.error("Пожалуйста, заполните все обязательные поля.");
 			return;
 		}
-
+		console.log(data)
 		mutate(data, {
-			onSuccess: (response) => {
+			onSuccess: (data) => {
 				setData({ ...formFields });
-				toast.success(response.data.message);
-			},
-			onError: (error) => {
-				toast.error(error.response.data.error);
+				toast.success(data.data.message);
+				console.log(data)
+				},
+				onError: (error) => {
+				console.log(error);
+				toast.error(error.response.data.message);
 			},
 		});
 	};

@@ -17,6 +17,12 @@ router.post(
 	submissionController.createSubmission
 );
 
+//  Getting submissions by event and mod
+router.get(
+	"/submissions/event/:eventId/mod/:modId",
+	submissionController.getSubmissionsByEventAndMod
+);
+
 // Update an existing submission by ID
 router.put("/submissions/:id", submissionController.updateSubmissionById);
 
@@ -38,18 +44,22 @@ router.get("/submissions/section/:sectionId", submissionController.getSubmission
 //  Getting submissions by author
 router.get("/submissions/author/:authorId", submissionController.getSubmissionsByAuthor);
 
+//  Getting submissions by author
+router.get("/submissions/event/:eventId", submissionController.getSubmissionsByEvent);
+
 //  Getting submissions by mod
 router.get("/submissions/mod/:modId", submissionController.getSubmissionsByMod);
 
 //  Grade sumission
 router.put("/submissions/grade/:id", submissionController.gradeSubmissionById);
 
-// group submissions by section 
+// group submissions by section
 router.get("/submissions/grouped/sections", submissionController.getAllSubmissionsGroupedBySection);
 
 // get winners of an event
 router.get("/submissions/results/:eventId", submissionController.getResultsByEvent);
 // get winners of an event
 router.get("/submissions/download/:filename", submissionController.downloadSubmissionFile);
+
 
 module.exports = router;

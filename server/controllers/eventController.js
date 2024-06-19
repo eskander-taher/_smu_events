@@ -222,7 +222,7 @@ exports.updateEventStatus = async (req, res) => {
 		const { id, status } = req.params;
 
 		// Validate the new status
-		const allowedStatuses = ["черновик", "предстоящий", "идет", "проверка заявок", "завершен"];
+		const allowedStatuses = ["черновик", "предстоящий", "идет", "проверка статей", "завершен"];
 		if (!allowedStatuses.includes(status)) {
 			return res.status(400).json({
 				success: false,

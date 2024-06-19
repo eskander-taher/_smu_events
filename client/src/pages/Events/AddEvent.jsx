@@ -154,7 +154,7 @@ const AddEvent = () => {
 									<div className="relative z-20 bg-white dark:bg-form-input">
 										<select
 											value={section.mod}
-											name="participantStatus"
+											name="mods"
 											onChange={(e) =>
 												handleSectionChange(index, "mod", e.target.value)
 											}
@@ -226,6 +226,7 @@ const AddEvent = () => {
 								Описание
 							</label>
 							<RichEditor
+								data-testid="event-rich-editor"
 								description={eventData.description}
 								setDescription={(value) => handleEventChange("description", value)}
 							/>
@@ -236,7 +237,7 @@ const AddEvent = () => {
 								type="submit"
 								onClick={handleSubmit}
 								disabled={isLoading}
-								value={isLoading ? "Загрузка" : "Сохранить и Отправить"}
+								value={isLoading ? "Загрузка" : "Добавить"}
 								className={`w-full rounded-lg border border-primary p-4 text-white transition ${
 									isLoading
 										? "bg-slate-500"

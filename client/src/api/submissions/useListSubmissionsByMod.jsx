@@ -10,7 +10,7 @@ const useListSubmissionsByMod = (id) => {
     });
   };
 
-  const request = useQuery(['submissions'], ListSubmissionRequest);
+  const request = useQuery(['submissions', 'mod', id], ListSubmissionRequest);
 
   return request;
 };

@@ -27,6 +27,7 @@ router.delete("/users/:id", authController.deleteUser);
 router.get("/users", authController.getAllUsers);
 router.get("/users/mods", authController.getAllMods);
 router.get("/users/authors", authController.getAllAuthors);
+router.get("/users/:id", authController.getUserById);
 
 // Delete all users route
 router.delete("/users", authController.deleteAllUsers);

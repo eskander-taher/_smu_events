@@ -10,7 +10,7 @@ const useListSubmissionsByAuthor = (id) => {
     });
   };
 
-  const request = useQuery(['submissions'], ListSubmissionRequest);
+  const request = useQuery(["submissions", "author", id], ListSubmissionRequest);
 
   return request;
 };

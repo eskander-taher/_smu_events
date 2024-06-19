@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 
 	let logoutUser = () => {
 		dispatch({ type: authActions.LOGOUT });
-		navigate("/auth/login");
+		navigate("/");
 	};
 
 	let contextData = {

@@ -8,26 +8,30 @@ import SignUpAuthor from "../pages/Authentication/SignUpAuthor";
 import Login from "../pages/Authentication/Login";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile";
+import UserProfile from "../pages/UserProfile";
 import Events from "../pages/Events/Events";
 import AddEvent from "../pages/Events/AddEvent";
 import EventList from "../pages/Events/EventList";
 import Event from "../pages/Events/Event";
 import EditEvent from "../pages/Events/EditEvent";
-import SubmissionList from "../pages/Submissions/SubmissionList";
 import AuthorSubmissionList from "../pages/Submissions/AuthorSubmissionList";
 import ModSubmissionList from "../pages/Submissions/ModSubmissionList";
 import AddSubmissions from "../pages/Submissions/AddSubmissions";
 import GradeSubmissions from "../pages/Submissions/GradeSubmissions";
-import ModeratorsList from "../pages/Moderators/ModeratorsList";
+import ModeratorsList from "../pages/Users/ModeratorsList";
+import AuthorsList from "../pages/Users/AuthorsList";
 import NewsList from "../pages/News/NewsList";
 import NewsAdd from "../pages/News/NewsAdd";
 import NewsDetail from "../pages/News/NewsDetail";
 import Settings from "../pages/Settings";
-
 import Goals from "../pages/About/Goals";
 import Activities from "../pages/About/Activities";
 import Staff from "../pages/About/Staff";
 import Contacts from "../pages/Contacts";
+import EventSubmissionLists from "../pages/Submissions/EventSubmissionLists";
+import SubmissionListByEvent from "../pages/Submissions/SubmissionListByEvent";
+import ModEventSubmissionLists from "../pages/Submissions/ModEventSubmissionLists";
+import ModSubmissionListByEvent from "../pages/Submissions/ModSubmissionListByEvent";
 
 // Routes configuration
 export const routesConfig = [
@@ -52,19 +56,37 @@ export const routesConfig = [
 	},
 	{
 		path: "/submission-list",
-		title: "Список подачи",
-		element: <SubmissionList />,
+		title: "Список Статьи",
+		element: <EventSubmissionLists />,
+		// role: "admin",
+	},
+	{
+		path: "/submission-list/:eventId",
+		title: "Список Статьи",
+		element: <SubmissionListByEvent />,
+		// role: "admin",
+	},
+	{
+		path: "/mod-submission-list",
+		title: "Список Статьи",
+		element: <ModEventSubmissionLists />,
+		// role: "admin",
+	},
+	{
+		path: "/mod-submission-list/:eventId",
+		title: "Список Статьи",
+		element: <ModSubmissionListByEvent />,
 		// role: "admin",
 	},
 	{
 		path: "/author-submission-list",
-		title: "Список подачи автора",
+		title: "Список Статьи автора",
 		element: <AuthorSubmissionList />,
 		// role: "author",
 	},
 	{
 		path: "/mod-submission-list",
-		title: "Список подачи модератора",
+		title: "Список Статьи модератора",
 		element: <ModSubmissionList />,
 		// role: "mod",
 	},
@@ -81,15 +103,22 @@ export const routesConfig = [
 		// role: "admin",
 	},
 	{
-		path: "/moderators/moderator-list",
+		path: "/users/moderator-list",
 		title: "Список модераторов",
 		element: <ModeratorsList />,
+		// role: "admin",
+	},
+	{
+		path: "/users/author-list",
+		title: "Список авторов",
+		element: <AuthorsList />,
 		// role: "admin",
 	},
 	{ path: "/news/news-list", title: "Список новостей", element: <NewsList /> },
 	{ path: "/news/add-news", title: "Добавить новость", element: <NewsAdd /> },
 	{ path: "/news/:id", title: "Новость", element: <NewsDetail /> },
 	{ path: "/profile", title: "Профиль", element: <Profile /> },
+	{ path: "/user-profile/:id", title: "Профиль", element: <UserProfile /> },
 	{ path: "/settings", title: "Настройки", element: <Settings /> },
 	{ path: "/auth/login", title: "Вход", element: <Login /> },
 	{

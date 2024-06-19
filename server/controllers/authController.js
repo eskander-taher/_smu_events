@@ -9,7 +9,7 @@ const sendVerificationEmail = require("../utils/sendVerificationEmail");
 const SALT_ROUNDS = 10;
 
 const userRegistrationSchema = z.object({
-	email: z.string().email(),
+	email: z.string(),
 	password: z.string().min(3),
 	firstName: z.string().min(1),
 	lastName: z.string().min(1),
@@ -102,7 +102,7 @@ exports.registerAuthor = async (req, res) => {
 		// Validating author input
 		let author = null;
 
-		console.log(req.body)
+		console.log(req.body);
 
 		try {
 			author = authorRegistrationSchema.parse({
@@ -304,6 +304,9 @@ exports.loginUser = async (req, res) => {
 				firstName: existingUser.firstName,
 				lastName: existingUser.lastName,
 				fullName: existingUser.fullName,
+				email: existingUser.email,
+				xp: existingUser.xp,
+				bio: existingUser.bio,
 				role: existingUser.role,
 			},
 			process.env.SECRET,
@@ -326,18 +329,29 @@ exports.loginUser = async (req, res) => {
 	}
 };
 
-exports.getAllUsers = async (req, res) => {
+exports.getUserById = async (req, res) => {
 	try {
-		const users = await User.find();
-
-		res.json({
-			success: true,
-			data: users,
+	  const user = await User.findById(req.params.id).exec();
+	  if (!user) {
+		return res.status(404).json({
+		  success: false,
+		  message: "Пользователь не найден",
 		});
+	  }
+	  res.status(200).json({
+		success: true,
+		message: "Пользователь успешно получен",
+		data: user,
+	  });
 	} catch (error) {
-		res.json({ success: false, message: "Ошибка сервера.", error });
+	  res.status(500).json({
+		success: false,
+		message: "Произошла ошибка при получении пользователя",
+		error: error.message,
+	  });
 	}
-};
+  };
+  
 
 exports.getAllUsers = async (req, res) => {
 	try {

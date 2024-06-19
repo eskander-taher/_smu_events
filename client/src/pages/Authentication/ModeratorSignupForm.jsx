@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import useRegisterModerator from "../../api/auth/useRegisterModerator";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { ToastContainer, toast } from "react-toastify";
-
+ 
 const formFields = {
 	lastName: "",
 	firstName: "",

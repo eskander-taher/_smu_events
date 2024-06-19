@@ -1,12 +1,8 @@
 import DefaultLayout from '../layout/DefaultLayout';
 import CoverOne from '../images/cover/cover-01.png';
 import userSix from '../images/user/user-06.png';
-import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-
 import { CiCamera } from 'react-icons/ci';
-import { FaFacebookF, FaLinkedinIn, FaTwitter } from 'react-icons/fa';
-
 import Title from "../components/Title";
 
 const Profile = () => {
@@ -56,63 +52,39 @@ const Profile = () => {
 					</div>
 					<div className="mt-4">
 						<h3 className="mb-1.5 text-2xl font-semibold text-black dark:text-white">
-							{user?.firstName}
+							{user?.fullName}
 						</h3>
 						<p className="font-medium">{user?.role}</p>
 						<div className="mx-auto mt-4.5 mb-5.5 grid max-w-94 grid-cols-3 rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]">
 							<div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-strokedark xsm:flex-row">
-								<span className="font-semibold text-black dark:text-white">10</span>
-								<span className="text-sm">Events</span>
+								<span className="font-semibold text-black dark:text-white">0</span>
+								<span className="text-sm">Мероприятия</span>
 							</div>
 							<div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-strokedark xsm:flex-row">
-								<span className="font-semibold text-black dark:text-white">20</span>
-								<span className="text-sm">Submissions</span>
+								<span className="font-semibold text-black dark:text-white">0</span>
+								<span className="text-sm">Статьи</span>
 							</div>
 							<div className="flex flex-col items-center justify-center gap-1 px-4 xsm:flex-row">
 								<span className="font-semibold text-black dark:text-white">
-									200
+									{user.xp}
 								</span>
 								<span className="text-sm">XP</span>
 							</div>
 						</div>
 
-						<div className="mx-auto max-w-180">
-							<h4 className="font-semibold text-black dark:text-white">About Me</h4>
-							<p className="mt-4.5">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-								Pellentesque posuere fermentum urna, eu condimentum mauris tempus
-								ut. Donec fermentum blandit aliquet. Etiam dictum dapibus ultricies.
-								Sed vel aliquet libero. Nunc a augue fermentum, pharetra ligula sed,
-								aliquam lacus.
-							</p>
-						</div>
+						{user?.bio && (
+							<div className="mx-auto max-w-180">
+								<h4 className="font-semibold text-black dark:text-white">Био</h4>
+								<p className="mt-4.5">{user.bio}</p>
+							</div>
+						)}
 
 						<div className="mt-6.5">
 							<h4 className="mb-3.5 font-medium text-black dark:text-white">
-								Follow me on
+								Контакты
 							</h4>
 							<div className="flex items-center justify-center gap-3.5">
-								<Link
-									to="#"
-									className="hover:text-primary"
-									aria-label="social-icon"
-								>
-									<FaFacebookF />
-								</Link>
-								<Link
-									to="#"
-									className="hover:text-primary"
-									aria-label="social-icon"
-								>
-									<FaTwitter />
-								</Link>
-								<Link
-									to="#"
-									className="hover:text-primary"
-									aria-label="social-icon"
-								>
-									<FaLinkedinIn />
-								</Link>
+								{user?.email}
 							</div>
 						</div>
 					</div>

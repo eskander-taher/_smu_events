@@ -7,10 +7,17 @@ import Title from "../../components/Title";
 function SubmissionList() {
 	const { data, isSuccess } = useListSubmissions();
 
+	let submissions = [];
+	if (isSuccess) {
+		submissions = data.data.data;
+	}
+
+	console.log(submissions);
+
 	return (
 		<DefaultLayout>
-			<Title>Подачи</Title>
-			{isSuccess && data?.data?.length > 0 && (
+			<Title>Статьи</Title>
+			{isSuccess && submissions.length > 0 && (
 				<table className="w-full table-auto">
 					<thead>
 						<tr className="bg-gray-2 text-left dark:bg-meta-4">
@@ -38,7 +45,7 @@ function SubmissionList() {
 						</tr>
 					</thead>
 					<tbody>
-						{data.data.map((item) => (
+						{submissions.map((item) => (
 							<tr key={item.id}>
 								<td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
 									<h5 className="font-medium text-black dark:text-white">
@@ -62,7 +69,7 @@ function SubmissionList() {
 								</td>
 								<td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
 									<h5 className="font-medium text-black dark:text-white">
-										{item.section.name}
+										{`${item.section.order}. ${item.section.name}`}
 									</h5>
 								</td>
 								<td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
@@ -85,7 +92,6 @@ function SubmissionList() {
 										>
 											Оценить
 										</Link>
-										{/* <button className="hover:text-primary">Action 3</button> */}
 									</div>
 								</td>
 							</tr>

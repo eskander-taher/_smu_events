@@ -1,1 +1,0 @@
-admin assigns moderators to sections

@@ -37,7 +37,7 @@ const Settings = () => {
 												name="bio"
 												id="bio"
 												rows={6}
-												placeholder="Write your bio here"
+												placeholder="Напишите вашу биографию здесь"
 												defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque posuere fermentum urna, eu condimentum mauris tempus ut. Donec fermentum blandit aliquet."
 											></textarea>
 										</div>
@@ -48,13 +48,13 @@ const Settings = () => {
 											className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
 											type="submit"
 										>
-											Cancel
+											Отмена
 										</button>
 										<button
 											className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90"
 											type="submit"
 										>
-											Save
+											Сохранить
 										</button>
 									</div>
 								</form>
@@ -65,7 +65,7 @@ const Settings = () => {
 						<div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
 							<div className="border-b border-stroke py-4 px-7 dark:border-strokedark">
 								<h3 className="font-medium text-black dark:text-white">
-									Your Photo
+									Ваше фото
 								</h3>
 							</div>
 							<div className="p-7">
@@ -76,14 +76,14 @@ const Settings = () => {
 										</div>
 										<div>
 											<span className="mb-1.5 text-black dark:text-white">
-												Edit your photo
+												Редактировать фото
 											</span>
 											<span className="flex gap-2.5">
 												<button className="text-sm hover:text-primary">
-													Delete
+													Удалить
 												</button>
 												<button className="text-sm hover:text-primary">
-													Update
+													Обновить
 												</button>
 											</span>
 										</div>
@@ -104,12 +104,12 @@ const Settings = () => {
 											</span>
 											<p>
 												<span className="text-primary">
-													Click to upload
+													Кликните для загрузки
 												</span>{" "}
-												or drag and drop
+												или перетащите файлы сюда
 											</p>
-											<p className="mt-1.5">SVG, PNG, JPG or GIF</p>
-											<p>(max, 800 X 800px)</p>
+											<p className="mt-1.5">SVG, PNG, JPG или GIF</p>
+											<p>(макс. 800 X 800px)</p>
 										</div>
 									</div>
 
@@ -118,13 +118,13 @@ const Settings = () => {
 											className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
 											type="submit"
 										>
-											Cancel
+											Отмена
 										</button>
 										<button
 											className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90"
 											type="submit"
 										>
-											Save
+											Сохранить
 										</button>
 									</div>
 								</form>

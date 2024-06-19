@@ -75,9 +75,9 @@ const Header = (props) => {
 							className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4`}
 						>
 							<span>
-								<GoSignIn />
+								<GoSignIn className="text-black dark:text-white" />
 							</span>
-							Войти
+							<span className="text-black dark:text-white">Войти</span>
 						</Link>
 					)}
 					{/* <!-- User Area --> */}

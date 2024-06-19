@@ -134,7 +134,7 @@ const EditEvent = () => {
 									<option value="черновик">черновик</option>
 									<option value="предстоящий">предстоящий</option>
 									<option value="идет">идет</option>
-									<option value="проверка заявок">проверка заявок</option>
+									<option value="проверка статей">проверка статей</option>
 									<option value="завершен">завершен</option>
 								</select>
 							</div>

@@ -27,6 +27,8 @@ const winnerData = [
 const WinnersTable = ({ eventId }) => {
   const { data, isSuccess } = useGetEventWinners(eventId);
 
+  let winners = isSuccess? data.data.data: []
+
   return (
 		<>
 			{isSuccess && (
@@ -34,7 +36,7 @@ const WinnersTable = ({ eventId }) => {
 					<Title>
 						Победители и призеры
 					</Title>
-					<div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+					<div className="my-5 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
 						<div className="max-w-full overflow-x-auto">
 							<table className="w-full table-auto">
 								<thead>
@@ -54,11 +56,12 @@ const WinnersTable = ({ eventId }) => {
 									</tr>
 								</thead>
 								<tbody>
-									{winnerData.map((sectionResult, key) => (
+									{winners.map((sectionResult, key) => (
 										<tr key={key}>
 											<td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
 												<h5 className="font-medium text-black dark:text-white">
-													{sectionResult.section.name}
+													{`${sectionResult.section.order}. ${sectionResult.section.name}`}
+													
 												</h5>
 											</td>
 											<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -67,7 +70,7 @@ const WinnersTable = ({ eventId }) => {
 														key={i}
 														className="text-black dark:text-white"
 													>
-														{winner.author.firstName}
+														{"- "}{winner.author.fullName}
 													</p>
 												))}
 											</td>
@@ -77,7 +80,7 @@ const WinnersTable = ({ eventId }) => {
 														key={i}
 														className="text-black dark:text-white"
 													>
-														{winner.author.firstName}
+														{"- "}{winner.author.fullName}
 													</p>
 												))}
 											</td>
@@ -87,7 +90,7 @@ const WinnersTable = ({ eventId }) => {
 														key={i}
 														className="text-black dark:text-white"
 													>
-														{winner.author.firstName}
+														{"- "}{winner.author.fullName}
 													</p>
 												))}
 											</td>

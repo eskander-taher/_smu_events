@@ -9,9 +9,9 @@ import Title from "../../components/Title";
 import { useQueryClient } from "react-query";
 import { ToastContainer, toast } from "react-toastify";
 import useConfirm from "../../hooks/useConfirm";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const eventStatusEnum = ["черновик", "предстоящий", "идет", "проверка заявок", "завершен"];
+const eventStatusEnum = ["черновик", "предстоящий", "идет", "проверка статей", "завершен"];
 
 const EventList = () => {
 	const { data, isSuccess } = useListEvents();
@@ -82,9 +82,11 @@ const EventList = () => {
 								{events.map((event) => (
 									<tr key={event._id}>
 										<td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-											<h5 className="font-medium text-black dark:text-white">
-												{event.name}
-											</h5>
+											<Link to={`/events/${event._id}`}>
+												<h5 className="font-medium text-black dark:text-white">
+													{event.name}
+												</h5>
+											</Link>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<div className="flex gap-1">
