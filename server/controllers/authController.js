@@ -32,8 +32,6 @@ const authorRegistrationSchema = userRegistrationSchema.extend({
 	university: z.string().min(1),
 	faculty: z.string().min(1),
 	department: z.string().min(1),
-	course: z.number().int().min(1),
-	groupNumber: z.string().min(1),
 });
 
 const modRegistrationSchema = userRegistrationSchema.extend({
@@ -107,7 +105,6 @@ exports.registerAuthor = async (req, res) => {
 		try {
 			author = authorRegistrationSchema.parse({
 				...req.body,
-				course: parseInt(req.body.course),
 			});
 		} catch (error) {
 			console.log(error);

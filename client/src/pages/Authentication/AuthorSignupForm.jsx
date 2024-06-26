@@ -27,8 +27,6 @@ const formFields = {
 	university: "",
 	faculty: "",
 	department: "",
-	course: "",
-	groupNumber: "",
 };
 
 const StatusEnum = ["Молодой ученый", "Специалитет", "Бакалавриат", "Магистрант", "Аспирант"];
@@ -60,14 +58,14 @@ const AuthorSignupForm = () => {
 			toast.error("Пожалуйста, заполните все обязательные поля.");
 			return;
 		}
-		console.log(data)
+		console.log(data);
 		mutate(data, {
 			onSuccess: (data) => {
 				setData({ ...formFields });
 				toast.success(data.data.message);
-				console.log(data)
-				},
-				onError: (error) => {
+				console.log(data);
+			},
+			onError: (error) => {
 				console.log(error);
 				toast.error(error.response.data.message);
 			},
@@ -114,10 +112,11 @@ const AuthorSignupForm = () => {
 			</div>
 			<div className="mb-4">
 				<label className="mb-2.5 block font-medium text-black dark:text-white">
-					Отчество
+					Отчество *
 				</label>
 				<div className="relative">
 					<input
+						required
 						type="text"
 						name="middleName"
 						value={data.middleName}
@@ -136,6 +135,7 @@ const AuthorSignupForm = () => {
 				</label>
 				<div className="relative">
 					<input
+						required
 						type="email"
 						name="email"
 						value={data.email}
@@ -154,6 +154,7 @@ const AuthorSignupForm = () => {
 				</label>
 				<div className="relative">
 					<input
+						required
 						type="password"
 						name="password"
 						value={data.password}
@@ -168,10 +169,11 @@ const AuthorSignupForm = () => {
 			</div>
 			<div className="mb-6">
 				<label className="mb-2.5 block font-medium text-black dark:text-white">
-					Номер телефона
+					Номер телефона *
 				</label>
 				<div className="relative">
 					<input
+						required
 						type="text"
 						name="phoneNumber"
 						value={data.phoneNumber}
@@ -187,10 +189,11 @@ const AuthorSignupForm = () => {
 
 			<div className="mb-6">
 				<label className="mb-2.5 block font-medium text-black dark:text-white">
-					Дата рождения
+					Дата рождения *
 				</label>
 				<div className="relative">
 					<input
+						required
 						type="text"
 						name="dateOfBirth"
 						value={data.dateOfBirth}
@@ -210,6 +213,7 @@ const AuthorSignupForm = () => {
 				</label>
 				<div className="relative">
 					<input
+						required
 						type="text"
 						name="university"
 						value={data.university}
@@ -228,6 +232,7 @@ const AuthorSignupForm = () => {
 				</label>
 				<div className="relative">
 					<input
+						required
 						type="text"
 						name="faculty"
 						value={data.faculty}
@@ -258,46 +263,14 @@ const AuthorSignupForm = () => {
 					</span>
 				</div>
 			</div>
-			<div className="mb-6">
-				<label className="mb-2.5 block font-medium text-black dark:text-white">Курс</label>
-				<div className="relative">
-					<input
-						type="text"
-						name="course"
-						value={data.course}
-						onChange={handleChange}
-						placeholder="Введите ваш курс"
-						className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-					/>
-					<span className="absolute right-4 top-4">
-						<IoBookOutline />
-					</span>
-				</div>
-			</div>
-			<div className="mb-6">
-				<label className="mb-2.5 block font-medium text-black dark:text-white">
-					Номер группы
-				</label>
-				<div className="relative">
-					<input
-						type="text"
-						name="groupNumber"
-						value={data.groupNumber}
-						onChange={handleChange}
-						placeholder="Введите ваш номер группы"
-						className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-					/>
-					<span className="absolute right-4 top-4">
-						<MdGroup />
-					</span>
-				</div>
-			</div>
+
 			<div className="mb-6">
 				<label className="mb-2.5 block font-medium text-black dark:text-white">
 					Статус участника *
 				</label>
 				<div className="relative">
 					<select
+						required
 						name="authorStatus"
 						value={data.authorStatus}
 						onChange={handleChange}
@@ -316,27 +289,12 @@ const AuthorSignupForm = () => {
 				</div>
 			</div>
 			<div className="mb-6">
-				<label className="mb-2.5 block font-medium text-black dark:text-white">Город</label>
-				<div className="relative">
-					<input
-						type="text"
-						name="city"
-						value={data.city}
-						onChange={handleChange}
-						placeholder="Введите ваш город"
-						className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-					/>
-					<span className="absolute right-4 top-4">
-						<LiaCitySolid />
-					</span>
-				</div>
-			</div>
-			<div className="mb-6">
 				<label className="mb-2.5 block font-medium text-black dark:text-white">
-					Регион
+					Регион *
 				</label>
 				<div className="relative">
 					<input
+						required
 						type="text"
 						name="region"
 						value={data.region}
@@ -349,6 +307,26 @@ const AuthorSignupForm = () => {
 					</span>
 				</div>
 			</div>
+			<div className="mb-6">
+				<label className="mb-2.5 block font-medium text-black dark:text-white">
+					Город *
+				</label>
+				<div className="relative">
+					<input
+						required
+						type="text"
+						name="city"
+						value={data.city}
+						onChange={handleChange}
+						placeholder="Введите ваш город"
+						className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+					/>
+					<span className="absolute right-4 top-4">
+						<LiaCitySolid />
+					</span>
+				</div>
+			</div>
+
 			<button
 				className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-gray"
 				onClick={handleSubmit}

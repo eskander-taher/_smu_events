@@ -38,6 +38,7 @@ exports.createSubmission = async (req, res) => {
 			status: data.status || "ожидание",
 			grade: data.grade,
 			grader: data.grader,
+			processingAgreed: data.processingAgreed,
 		});
 
 		const savedSubmission = await submission.save({ session });
@@ -45,14 +46,14 @@ exports.createSubmission = async (req, res) => {
 		await session.commitTransaction();
 		res.json({
 			success: true,
-			message: "Успешное создание Статьи",
+			message: "Успешное создание Заявки",
 			data: savedSubmission,
 		});
 	} catch (error) {
 		await session.abortTransaction();
 		res.status(500).json({
 			success: false,
-			message: "Произошла ошибка при создании Статьи.",
+			message: "Произошла ошибка при создании Заявки.",
 			error: error.message,
 		});
 	} finally {
@@ -115,14 +116,14 @@ exports.updateSubmissionById = async (req, res) => {
 		await session.commitTransaction();
 		res.json({
 			success: true,
-			message: "Успешное обновление Статьи",
+			message: "Успешное обновление Заявки",
 			data: savedSubmission,
 		});
 	} catch (error) {
 		await session.abortTransaction();
 		res.status(500).json({
 			success: false,
-			message: "Произошла ошибка при обновлении Статьи.",
+			message: "Произошла ошибка при обновлении Заявки.",
 			error: error.message,
 		});
 	} finally {
@@ -144,13 +145,13 @@ exports.getAllSubmissions = async (req, res) => {
 			.exec();
 		res.status(200).json({
 			success: true,
-			message: "Все Статьи успешно получены",
+			message: "Все Заявки успешно получены",
 			data: submissions,
 		});
 	} catch (error) {
 		res.status(500).json({
 			success: false,
-			message: "Произошла ошибка при получении всех Статьи",
+			message: "Произошла ошибка при получении всех Заявки",
 			error: error.message,
 		});
 	}
@@ -183,7 +184,7 @@ exports.getSubmissionById = async (req, res) => {
 	} catch (error) {
 		res.status(500).json({
 			success: false,
-			message: "Произошла ошибка при получении Статьи",
+			message: "Произошла ошибка при получении Заявки",
 			error: error.message,
 		});
 	}
@@ -207,20 +208,20 @@ exports.getSubmissionsBySection = async (req, res) => {
 		if (!submissions) {
 			return res.status(404).json({
 				success: false,
-				message: "Статьи для этого раздела не найдены",
+				message: "Заявки для этого раздела не найдены",
 				error: "No submissions found for this section",
 			});
 		}
 
 		res.status(200).json({
 			success: true,
-			message: "Статьи по разделу успешно получены",
+			message: "Заявки по разделу успешно получены",
 			data: submissions,
 		});
 	} catch (error) {
 		res.status(500).json({
 			success: false,
-			message: "Произошла ошибка при получении Статьи по разделу",
+			message: "Произошла ошибка при получении Заявки по разделу",
 			error: error.message,
 		});
 	}
@@ -244,20 +245,20 @@ exports.getSubmissionsByAuthor = async (req, res) => {
 		if (!submissions) {
 			return res.status(404).json({
 				success: false,
-				message: "Статьи для этого автора не найдены",
+				message: "Заявки для этого автора не найдены",
 				error: "No submissions found for this author",
 			});
 		}
 
 		res.status(200).json({
 			success: true,
-			message: "Статьи по автору успешно получены",
+			message: "Заявки по автору успешно получены",
 			data: submissions,
 		});
 	} catch (error) {
 		res.status(500).json({
 			success: false,
-			message: "Произошла ошибка при получении Статьи по автору",
+			message: "Произошла ошибка при получении Заявки по автору",
 			error: error.message,
 		});
 	}
@@ -304,14 +305,14 @@ exports.gradeSubmissionById = async (req, res) => {
 		await session.commitTransaction();
 		res.status(200).json({
 			success: true,
-			message: "Оценка Статьи успешно обновлена",
+			message: "Оценка Заявки успешно обновлена",
 			data: savedSubmission,
 		});
 	} catch (error) {
 		await session.abortTransaction();
 		res.status(500).json({
 			success: false,
-			message: "Произошла ошибка при оценке Статьи.",
+			message: "Произошла ошибка при оценке Заявки.",
 			error: error.message,
 		});
 	} finally {
@@ -335,20 +336,20 @@ exports.getAcceptedSubmissions = async (req, res) => {
 		if (!submissions || submissions.length === 0) {
 			return res.status(404).json({
 				success: false,
-				message: "Принятые Статьи не найдены",
+				message: "Принятые Заявки не найдены",
 				error: "No accepted submissions found",
 			});
 		}
 
 		res.status(200).json({
 			success: true,
-			message: "Принятые Статьи успешно получены",
+			message: "Принятые Заявки успешно получены",
 			data: submissions,
 		});
 	} catch (error) {
 		res.status(500).json({
 			success: false,
-			message: "Произошла ошибка при получении принятых Статьи",
+			message: "Произошла ошибка при получении принятых Заявки",
 			error: error.message,
 		});
 	}
@@ -386,20 +387,20 @@ exports.getSubmissionsByMod = async (req, res) => {
 		if (!submissions) {
 			return res.status(404).json({
 				success: false,
-				message: "Статьи для этого модератора не найдены",
+				message: "Заявки для этого модератора не найдены",
 				error: "No submissions found for this moderator",
 			});
 		}
 
 		res.status(200).json({
 			success: true,
-			message: "Статьи по модератору успешно получены",
+			message: "Заявки по модератору успешно получены",
 			data: submissions,
 		});
 	} catch (error) {
 		res.status(500).json({
 			success: false,
-			message: "Произошла ошибка при получении Статьи по модератору",
+			message: "Произошла ошибка при получении Заявки по модератору",
 			error: error.message,
 		});
 	}
@@ -442,13 +443,13 @@ exports.getAllSubmissionsGroupedBySection = async (req, res) => {
 
 		res.status(200).json({
 			success: true,
-			message: "Статьи, сгруппированные по разделу, успешно получены",
+			message: "Заявки, сгруппированные по разделу, успешно получены",
 			data: groupedBySection,
 		});
 	} catch (error) {
 		res.status(500).json({
 			success: false,
-			message: "Произошла ошибка при группировке Статьи по разделам",
+			message: "Произошла ошибка при группировке Заявки по разделам",
 			error: error.message,
 		});
 	}
@@ -484,7 +485,7 @@ exports.deleteSubmissionById = async (req, res) => {
 		session.endSession();
 		res.status(500).json({
 			success: false,
-			message: "Произошла ошибка при удалении Статьи",
+			message: "Произошла ошибка при удалении Заявки",
 			error: error.message,
 		});
 	}
@@ -608,20 +609,20 @@ exports.getSubmissionsByEvent = async (req, res) => {
 		if (!submissions) {
 			return res.status(404).json({
 				success: false,
-				message: "Статьи  не найдены",
+				message: "Заявки  не найдены",
 				error: "No submissions found ",
 			});
 		}
 
 		res.status(200).json({
 			success: true,
-			message: "Статьи успешно получены",
+			message: "Заявки успешно получены",
 			data: submissions,
 		});
 	} catch (error) {
 		res.status(500).json({
 			success: false,
-			message: "Произошла ошибка при получении Статьи",
+			message: "Произошла ошибка при получении Заявки",
 			error: error.message,
 		});
 	}
@@ -659,20 +660,20 @@ exports.getSubmissionsByEventAndMod = async (req, res) => {
 		if (!submissions) {
 			return res.status(404).json({
 				success: false,
-				message: "Статьи не найдены для указанного события и модератора",
+				message: "Заявки не найдены для указанного события и модератора",
 				error: "No submissions found for the specified event and moderator",
 			});
 		}
 
 		res.status(200).json({
 			success: true,
-			message: "Статьи успешно получены",
+			message: "Заявки успешно получены",
 			data: submissions,
 		});
 	} catch (error) {
 		res.status(500).json({
 			success: false,
-			message: "Произошла ошибка при получении Статьи",
+			message: "Произошла ошибка при получении Заявки",
 			error: error.message,
 		});
 	}

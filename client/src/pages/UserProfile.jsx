@@ -23,7 +23,6 @@ const UserProfile = () => {
 						alt="UserProfile cover"
 						className="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center"
 					/>
-					
 				</div>
 				<div className="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
 					<div className="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
@@ -43,7 +42,7 @@ const UserProfile = () => {
 							</div>
 							<div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-strokedark xsm:flex-row">
 								<span className="font-semibold text-black dark:text-white">0</span>
-								<span className="text-sm">Статьи</span>
+								<span className="text-sm">Заявки</span>
 							</div>
 							<div className="flex flex-col items-center justify-center gap-1 px-4 xsm:flex-row">
 								<span className="font-semibold text-black dark:text-white">

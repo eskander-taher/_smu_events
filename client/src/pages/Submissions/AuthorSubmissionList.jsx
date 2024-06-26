@@ -12,7 +12,7 @@ function ModSubmissionList() {
 
 	return (
 		<DefaultLayout>
-			<Title>Статьи</Title>
+			<Title>Заявки</Title>
 			<table className="w-full table-auto">
 				<thead>
 					<tr className="bg-gray-2 text-left dark:bg-meta-4">

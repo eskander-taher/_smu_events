@@ -34,16 +34,6 @@ const authorSchema = new Schema({
 		trim: true,
 		required: true,
 	},
-	course: {
-		type: Number,
-		trim: true,
-		required: true,
-	},
-	groupNumber: {
-		type: String,
-		trim: true,
-		required: true,
-	},
 	submissions: [
 		{
 			type: Schema.Types.ObjectId,

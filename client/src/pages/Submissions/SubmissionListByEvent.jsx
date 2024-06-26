@@ -9,7 +9,7 @@ const SubmissionTable = ({ submissions }) => (
 	<table className="w-full table-auto">
 		<thead>
 			<tr className="bg-gray-2 text-left dark:bg-meta-4">
-				{["Имя автора", "Название работы", "Секция", "Статус", "Действия"].map(
+				{["ФИО автора", "Название работы", "Секция", "Статус", "Действия"].map(
 					(heading) => (
 						<th
 							key={heading}
@@ -61,7 +61,7 @@ const SubmissionListByEvent = () => {
 
 	return (
 		<DefaultLayout>
-			<Title>Статьи</Title>
+			<Title>Заявки</Title>
 			{isLoading ? (
 				<Skeleton />
 			) : isError ? (

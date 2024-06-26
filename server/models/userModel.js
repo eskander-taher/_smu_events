@@ -39,9 +39,11 @@ const userSchema = new Schema(
 		middleName: {
 			type: String,
 			trim: true,
+			required: true,
 		},
 		dateOfBirth: {
 			type: String,
+			required: true,
 		},
 		fullName: {
 			type: String,

@@ -6,7 +6,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { SlDocs } from "react-icons/sl";
 import { LuUserCheck } from "react-icons/lu";
 import { IoPersonOutline } from "react-icons/io5";
-import { CiSettings } from "react-icons/ci";
+import { CiHome, CiSettings } from "react-icons/ci";
 import SMU_LOGO from "../../images/assets/logo_dark_mode.png";
 
 import useAuth from "../../hooks/useAuth";
@@ -103,7 +103,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 										pathname === "/" && "bg-graydark dark:bg-meta-4"
 									}`}
 								>
-									<IoPersonOutline />
+									<CiHome />
 									Главная
 								</NavLink>
 							</li>
@@ -294,7 +294,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 											}`}
 										>
 											<SlDocs />
-											Статьи
+											Заявки
 										</NavLink>
 									</li>
 								)}
@@ -309,7 +309,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 											}`}
 										>
 											<SlDocs />
-											Статьи
+											Заявки
 										</NavLink>
 									</li>
 								)}
@@ -324,7 +324,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 											}`}
 										>
 											<SlDocs />
-											Статьи
+											Заявки
 										</NavLink>
 									</li>
 								)}
@@ -332,8 +332,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 								{user.role === "админ" && (
 									<SidebarLinkGroup
 										activeCondition={
-											pathname === "/users" ||
-											pathname.includes("/users")
+											pathname === "/users" || pathname.includes("/users")
 										}
 									>
 										{(handleClick, open) => (

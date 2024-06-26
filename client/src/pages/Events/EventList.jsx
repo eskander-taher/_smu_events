@@ -44,7 +44,7 @@ const EventList = () => {
 					console.log(error);
 				},
 			});
-		}, "Вы уверены, что хотите удалить эту новость?");
+		}, "Вы уверены, что хотите удалить мероприятие?");
 	};
 
 	const handleStatusChange = (eventId, newStatus) => {

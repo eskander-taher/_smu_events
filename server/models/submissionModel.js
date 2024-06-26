@@ -24,6 +24,10 @@ const submissionSchema = new Schema(
 		withPublication: {
 			type: Boolean,
 		},
+		processingAgreed: {
+			type: Boolean,
+			required: true,
+		},
 		supervisorName: {
 			type: String,
 			required: true,

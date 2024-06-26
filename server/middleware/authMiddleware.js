@@ -7,7 +7,7 @@ const authenticateToken = (requiredRole) => async (req, res, next) => {
 	if (!token) {
 		return res.status(401).json({
 			success: false,
-			error: "Access denied. Token not provided.",
+			error: "Доступ запрещен. Токен не предоставлен.",
 		});
 	}
 
@@ -19,22 +19,22 @@ const authenticateToken = (requiredRole) => async (req, res, next) => {
 		if (!user) {
 			return res.status(404).json({
 				success: false,
-				error: "User not found.",
+				error: "Пользователь не найден.",
 			});
 		}
 
 		if (!user.verifiedByEmail) {
 			return res.status(403).json({
 				success: false,
-				error: "User email not verified. Please verify your email.",
+				error: "Электронная почта пользователя не подтверждена. Пожалуйста, подтвердите свой адрес электронной почты.",
 			});
 		}
 
-		if (user.role === "mod") {
+		if (user.role === "модератор") {
 			if (!user.verifiedByAdmin) {
 				return res.status(403).json({
 					success: false,
-					error: "Mod  not verified by admin.",
+					error: "модератор не проверен администратором.",
 				});
 			}
 		}
@@ -42,17 +42,17 @@ const authenticateToken = (requiredRole) => async (req, res, next) => {
 		if (user.role !== requiredRole) {
 			return res.status(403).json({
 				success: false,
-				error: "Access denied. Insufficient privileges.",
+				error: "Доступ запрещен. Недостаточно прав.",
 			});
 		}
 
 		req.user = user; // Attach the user to the request for later use in the route handler
 		next();
 	} catch (error) {
-		console.error("Authentication error:", error);
+		console.error("Ошибка аутентификации:", error);
 		res.status(401).json({
 			success: false,
-			error: "Invalid token.",
+			error: "Неверный токен.",
 		});
 	}
 };

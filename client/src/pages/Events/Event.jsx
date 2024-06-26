@@ -22,7 +22,7 @@ const Event = () => {
 				<p>Не удалось загрузить данные с сервера</p>
 			) : (
 				<>
-					{event.status === "идет" && user.role === "автор" && (
+					{event.status === "идет" && user?.role === "автор" && (
 						<Link
 							to={`/events/${eventId}/add-submission`}
 							className="w-full inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"

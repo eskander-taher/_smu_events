@@ -30,7 +30,7 @@ const ImageSlider = () => {
 	return (
 		<div className="relative w-full h-64 overflow-hidden">
 			<div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 z-10 vignette">
-				<span className="text-white text-3xl mb-4 font-semibold">СОВЕТ МОЛОДЫХ УЧЕНЫХ</span>
+				<span className="text-white text-center text-3xl mb-4 font-semibold">СОВЕТ МОЛОДЫХ УЧЕНЫХ</span>
 				{!user ? (
 					<div className="flex flex-col sm:flex-row gap-2">
 						<button

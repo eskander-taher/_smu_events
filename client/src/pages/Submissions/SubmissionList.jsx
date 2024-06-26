@@ -16,19 +16,19 @@ function SubmissionList() {
 
 	return (
 		<DefaultLayout>
-			<Title>Статьи</Title>
+			<Title>Заявки</Title>
 			{isSuccess && submissions.length > 0 && (
 				<table className="w-full table-auto">
 					<thead>
 						<tr className="bg-gray-2 text-left dark:bg-meta-4">
 							<th className=" py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-								Имя автора
+								ФИО автора
 							</th>
 							<th className=" py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
 								Название работы
 							</th>
 							<th className=" py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-								Имя руководителя
+								ФИО руководителя
 							</th>
 							<th className=" py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
 								Мероприятие

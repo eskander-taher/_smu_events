@@ -15,7 +15,7 @@ const ModEventSubmissionLists = () => {
 
 	return (
 		<DefaultLayout>
-			<Title>Статьи</Title>
+			<Title>Заявки</Title>
 
 			<div className="flex flex-col gap-4 md:gap-6">
 				{isLoading ? (

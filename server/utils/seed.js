@@ -6,15 +6,15 @@ const Mod = require("../models/modModel");
 const Author = require("../models/authorModel");
 const User = require("../models/userModel");
 
+const HASHED_PASSWORD = "$2b$10$1TbWRpFKKoLdGPY33LCKKeN7EJm6V.2Zdzy1lvciydDJs5xtAClSe"
+
 // Connect to MongoDB
 mongoose.connect(
 	"mongodb+srv://eskandertaher:wyDfmmc6eerTU81O@cluster0.fk9njl5.mongodb.net/uust_smu"
 );
 
 const addPasswordToUsers = async (users) => {
-	const salt = await bcrypt.genSalt(10);
-	const hashedPassword = await bcrypt.hash("123", salt);
-	return users.map((user) => ({ ...user, password: hashedPassword }));
+	return users.map((user) => ({ ...user, password: HASHED_PASSWORD }));
 };
 
 const addFullNameToUsers = (users) => {
@@ -26,7 +26,7 @@ const addFullNameToUsers = (users) => {
 
 const adminData = {
 	email: "admin@gmail.com",
-	password: "$2b$10$1TbWRpFKKoLdGPY33LCKKeN7EJm6V.2Zdzy1lvciydDJs5xtAClSe",
+	password: HASHED_PASSWORD,
 	phoneNumber: "89500335200",
 	verifiedByEmail: true,
 	role: "админ",
