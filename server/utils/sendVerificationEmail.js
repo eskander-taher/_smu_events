@@ -17,7 +17,7 @@ const generateVerificationLink = (id) => {
 	const verificationToken = jwt.sign({ id: id }, process.env.SECRET, {
 		expiresIn: "1d",
 	});
-	return `http://localhost:80/api/verify-email?token=${verificationToken}`;
+	return `http://46.101.105.105:80/api/verify-email?token=${verificationToken}`; 
 };
 
 async function sendVerificationEmail(id, email) {
