@@ -315,7 +315,7 @@ const AddSubmissions = () => {
 						</label>
 					</div>
 
-					<div className="mb-4">
+					{/* <div className="mb-4">
 						<label className="mb-2.5 block font-medium text-black dark:text-white">
 							<p className="mb-2.5">
 								Согласен на обработку персональных данных в соответствии с
@@ -377,7 +377,7 @@ const AddSubmissions = () => {
 								</div>
 							</div>
 						</label>
-					</div>
+					</div> */}
 
 					<div className="mb-5">
 						<input
