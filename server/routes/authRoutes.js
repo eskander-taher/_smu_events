@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../controllers/authController"); // Adjust the path as necessary
+const authMiddleware = require("../middleware/authMiddleware");
 
 // User login route
 router.post("/login", authController.loginUser);
@@ -25,7 +26,7 @@ router.delete("/users/:id", authController.deleteUser);
 
 // Get all users route
 router.get("/users", authController.getAllUsers);
-router.get("/users/mods", authController.getAllMods);
+router.get("/users/mods", authMiddleware("админ"), authController.getAllMods);
 router.get("/users/authors", authController.getAllAuthors);
 router.get("/users/:id", authController.getUserById);
 

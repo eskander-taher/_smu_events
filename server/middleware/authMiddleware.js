@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel"); // Adjust the path as necessary
-
+ 
 const authenticateToken = (requiredRole) => async (req, res, next) => {
 	const token = req.header("Authorization")?.split(" ")[1];
 
@@ -13,6 +13,7 @@ const authenticateToken = (requiredRole) => async (req, res, next) => {
 
 	try {
 		const decoded = jwt.verify(token, process.env.SECRET);
+		console.log(decoded)
 
 		const user = await User.findById(decoded.id);
 
