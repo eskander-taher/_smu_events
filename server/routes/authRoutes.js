@@ -33,5 +33,4 @@ router.get("/users/:id", authController.getUserById);
 // Delete all users route
 router.delete("/users", authController.deleteAllUsers);
 
-
 module.exports = router;
